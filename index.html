@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ular Tangga Bercanda Pink Edition</title>
+  <style>
+    * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #ffd9ec 0%, #ffc1de 45%, #ffb0d3 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 12px;
+      color: #6d174a;
+    }
+
+    .app {
+      width: min(100%, 420px);
+      background: linear-gradient(180deg, #ffd9ec 0%, #ffc1de 45%, #ffb0d3 100%);
+      position: relative;
+    }
+
+    .topbar {
+      position: relative;
+      padding-top: 8px;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: 0.8px;
+      margin: 8px 0 6px;
+      text-transform: uppercase;
+      color: #8a1355;
+      text-shadow: 0 2px 0 rgba(255,255,255,0.45);
+    }
+
+    .settings-btn {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 48px;
+      height: 48px;
+      border: 2px solid #b42873;
+      background: linear-gradient(180deg, #ffe1ef 0%, #ffbfdc 100%);
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 6px 14px rgba(180,40,115,0.18);
+    }
+
+    .settings-btn:hover { background: linear-gradient(180deg, #ffd6ea 0%, #ffb3d7 100%); }
+
+    .board-frame {
+      border: 3px solid #b42873;
+      background: linear-gradient(180deg, #ffe5f1 0%, #ffcfe4 100%);
+      padding: 6px;
+      aspect-ratio: 1 / 1;
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      box-shadow: 0 12px 30px rgba(180,40,115,0.18);
+    }
+
+    .board {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      grid-template-rows: repeat(10, 1fr);
+      background: #fff7fb;
+      overflow: hidden;
+    }
+
+    .cell {
+      position: relative;
+      border: 1px solid rgba(138,19,85,0.18);
+      padding: 2px;
+      font-size: clamp(8px, 1.9vw, 12px);
+      font-weight: 700;
+      color: #8a1355;
+      background: #fff5fa;
+    }
+
+    .cell:nth-child(odd) { background: #ffe8f3; }
+    .cell.snake-head { background: #ffc7de; }
+    .cell.snake-tail { background: #ffe9f2; }
+    .cell.ladder-start { background: #f5d9ff; }
+    .cell.ladder-end { background: #fbeeff; }
+
+    .cell.punishment-cell {
+      background: #ffd8ee;
+      outline: 2px solid #e23d91;
+      outline-offset: -2px;
+    }
+
+    .cell-mark {
+      position: absolute;
+      right: 2px;
+      bottom: 1px;
+      font-size: clamp(8px, 1.7vw, 11px);
+    }
+
+    .cell-mark-top {
+      position: absolute;
+      top: 1px;
+      right: 2px;
+      font-size: clamp(8px, 1.7vw, 11px);
+    }
+
+    .lines {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .snake-line {
+      stroke: #e33d86;
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-dasharray: 8 8;
+      opacity: 0.82;
+    }
+
+    .ladder-line {
+      stroke: #b54bff;
+      stroke-width: 6;
+      stroke-linecap: round;
+      opacity: 0.82;
+    }
+
+    .tokens {
+      position: absolute;
+      inset: 10px;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .token {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 10px;
+      font-weight: 800;
+      border: 2px solid white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      transform: translate(-50%, -50%);
+      transition: left 0.34s ease, top 0.34s ease, transform 0.18s ease;
+    }
+
+    .token.step-pop { transform: translate(-50%, -50%) scale(1.18); }
+
+    .bottom-row {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .info-box,
+    .dice-box {
+      border: 2px solid #c42f7d;
+      background: linear-gradient(180deg, #fff0f7 0%, #ffd8e9 100%);
+      min-height: 110px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 22px;
+      box-shadow: 0 10px 22px rgba(196,47,125,0.16);
+    }
+
+    .turn-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .turn-icon {
+      font-size: 42px;
+      line-height: 1;
+    }
+
+    .turn-text { line-height: 1.1; }
+
+    .turn-label {
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 6px;
+      color: #8a1355;
+    }
+
+    .turn-player {
+      font-size: 14px;
+      font-weight: 800;
+      color: #6d174a;
+    }
+
+    .dice-area {
+      width: 100%;
+      display: grid;
+      justify-items: center;
+      gap: 8px;
+    }
+
+    .dice {
+      width: 74px;
+      height: 74px;
+      border: 2px solid #b42873;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fff8fc 0%, #ffd9eb 100%);
+      display: grid;
+      place-items: center;
+      font-size: 40px;
+      font-weight: 900;
+      box-shadow: inset 0 -5px 0 rgba(180,40,115,0.12), 0 8px 16px rgba(180,40,115,0.12);
+      color: #8a1355;
+    }
+
+    .dice.rolling { animation: rollDice 0.12s linear infinite; }
+
+    @keyframes rollDice {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(15deg) scale(1.08); }
+      100% { transform: rotate(-15deg) scale(1); }
+    }
+
+    .roll-btn {
+      width: 100%;
+      border: 1.8px solid #333;
+      background: #fff;
+      color: #6d174a;
+      font-weight: 900;
+      padding: 11px 10px;
+      cursor: pointer;
+      border-radius: 10px;
+      text-transform: uppercase;
+      font-size: 14px;
+    }
+
+    .roll-btn:hover { background: linear-gradient(180deg, #ff5ca8 0%, #dc2f7f 100%); }
+    .roll-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .status-box {
+      display: none;
+    }
+
+    .players-mini {
+      margin-top: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .player-mini {
+      border: 1.8px solid #d94c95;
+      background: linear-gradient(180deg, #fff2f8 0%, #ffe0ee 100%);
+      padding: 8px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 14px;
+      color: #6d174a;
+    }
+
+    .player-mini.active {
+      background: linear-gradient(180deg, #ffcee5 0%, #ffb5d6 100%);
+      border-color: #b42873;
+      box-shadow: 0 6px 14px rgba(180,40,115,0.18);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 999;
+    }
+
+    .modal-overlay.show { display: flex; }
+
+    .modal-box {
+      width: min(92vw, 360px);
+      background: linear-gradient(180deg, #fff2f8 0%, #ffd8ea 100%);
+      border: 2px solid #b42873;
+      padding: 18px;
+      box-shadow: 0 18px 40px rgba(180,40,115,0.28);
+      animation: modalPop 0.25s ease;
+      border-radius: 22px;
+    }
+
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.9) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-title {
+      font-size: 22px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      text-align: center;
+      color: #8a1355;
+    }
+
+    .modal-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: #6d174a;
+    }
+
+    .modal-input {
+      width: 100%;
+      border: 2px solid #666;
+      background: #fff7fb;
+      padding: 12px;
+      font-size: 16px;
+      margin-bottom: 14px;
+      outline: none;
+    }
+
+    .modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .modal-btn {
+      border: 2px solid #333;
+      background: #fff7fb;
+      padding: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    .modal-btn.primary {
+      background: linear-gradient(180deg, #ff4fa0 0%, #e83e8c 100%);
+      color: white;
+      border-color: #b42873;
+    }
+
+    .punishment-box { text-align: center; }
+    .punishment-icon { font-size: 42px; margin-bottom: 10px; }
+
+    .punishment-title {
+      font-size: 24px;
+      font-weight: 900;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      color: #8a1355;
+    }
+
+    .punishment-text {
+      font-size: 17px;
+      line-height: 1.45;
+      margin-bottom: 14px;
+      color: #6d174a;
+    }
+
+    @media (max-width: 420px) {
+      .title { font-size: 22px; }
+      .bottom-row { gap: 10px; }
+      .info-box, .dice-box { min-height: 102px; }
+      .turn-label { font-size: 16px; }
+      .turn-player { font-size: 13px; }
+      .dice { width: 66px; height: 66px; font-size: 36px; }
+      .token { width: 16px; height: 16px; font-size: 9px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="title">ULAR TANGGA<br>BERCANDA</div>
+      <button class="settings-btn" id="openSettingsBtn" title="Setting">⚙️</button>
+    </div>
+
+    <div class="board-frame">
+      <div id="board" class="board">
+        <svg id="lines" class="lines"></svg>
+        <div id="tokens" class="tokens"></div>
+      </div>
+    </div>
+
+    <div class="bottom-row">
+      <div class="info-box">
+        <div class="turn-wrap">
+          <div class="turn-icon">♟️</div>
+          <div class="turn-text">
+            <div class="turn-label">Giliran :</div>
+            <div id="turnPlayer" class="turn-player">Belum diatur</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dice-box">
+        <div class="dice-area">
+          <div id="dice" class="dice">🎲</div>
+          <button id="rollBtn" class="roll-btn">Putar Dadu</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="statusBox" class="status-box">
+      Klik icon setting terlebih dahulu untuk mengatur jumlah pemain, lalu mulai permainan.
+    </div>
+
+    <div id="playersMini" class="players-mini"></div>
+  </div>
+
+  <div id="settingsModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-title">Setting Pemain</div>
+      <label for="playerCount" class="modal-label">Jumlah Pemain (2 - 6)</label>
+      <input type="number" id="playerCount" class="modal-input" min="2" max="6" value="2" />
+      <div class="modal-actions">
+        <button class="modal-btn" id="closeSettingsBtn">Tutup</button>
+        <button class="modal-btn primary" id="saveSettingsBtn">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="punishmentModal" class="modal-overlay">
+    <div class="modal-box punishment-box">
+      <div class="punishment-icon">⚠️</div>
+      <div class="punishment-title">Hukuman</div>
+      <div id="punishmentText" class="punishment-text">anda mendapatkan hukuma</div>
+      <button class="modal-btn primary" id="closePunishmentBtn">Mengerti</button>
+    </div>
+  </div>
+
+  <script>
+    const board = document.getElementById("board");
+    const tokensLayer = document.getElementById("tokens");
+    const linesSvg = document.getElementById("lines");
+    const diceBox = document.getElementById("dice");
+    const rollBtn = document.getElementById("rollBtn");
+    const statusBox = document.getElementById("statusBox");
+    const playersMini = document.getElementById("playersMini");
+    const turnPlayer = document.getElementById("turnPlayer");
+
+    const settingsModal = document.getElementById("settingsModal");
+    const punishmentModal = document.getElementById("punishmentModal");
+    const punishmentText = document.getElementById("punishmentText");
+    const playerCountInput = document.getElementById("playerCount");
+
+    const openSettingsBtn = document.getElementById("openSettingsBtn");
+    const closeSettingsBtn = document.getElementById("closeSettingsBtn");
+    const saveSettingsBtn = document.getElementById("saveSettingsBtn");
+    const closePunishmentBtn = document.getElementById("closePunishmentBtn");
+
+    const snakes = {
+      98: 78, 95: 75, 92: 88, 83: 63, 73: 53,
+      64: 44, 59: 39, 48: 28, 36: 16, 17: 7
+    };
+
+    const ladders = {
+      3: 22, 8: 30, 15: 45, 21: 42, 28: 76,
+      50: 67, 57: 79, 66: 89, 71: 91, 80: 99
+    };
+
+    const punishmentCells = [5, 19, 27, 31, 40];
+    const playerColors = ["#e53935", "#1e88e5", "#43a047", "#8e24aa", "#fb8c00", "#00897b"];
+
+    let players = [];
+    let currentPlayer = 0;
+    let gameStarted = false;
+    let gameOver = false;
+    let popupCloseCallback = null;
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function createBoard() {
+      board.querySelectorAll(".cell").forEach(cell => cell.remove());
+
+      const displayNumbers = [];
+      for (let row = 9; row >= 0; row--) {
+        const start = row * 10 + 1;
+        const nums = Array.from({ length: 10 }, (_, i) => start + i);
+        if ((9 - row) % 2 === 0) nums.reverse();
+        displayNumbers.push(...nums);
+      }
+
+      displayNumbers.forEach(num => {
+        const cell = document.createElement("div");
+        cell.className = "cell";
+        cell.dataset.num = num;
+        cell.innerHTML = `<span>${num}</span>`;
+
+        if (snakes[num]) {
+          cell.classList.add("snake-head");
+          cell.innerHTML += `<span class="cell-mark">🐍</span>`;
+        }
+
+        if (Object.values(snakes).includes(num)) cell.classList.add("snake-tail");
+
+        if (ladders[num]) {
+          cell.classList.add("ladder-start");
+          cell.innerHTML += `<span class="cell-mark">🪜</span>`;
+        }
+
+        if (Object.values(ladders).includes(num)) cell.classList.add("ladder-end");
+
+        if (punishmentCells.includes(num)) {
+          cell.classList.add("punishment-cell");
+          cell.innerHTML += `<span class="cell-mark-top">⚠️</span>`;
+        }
+
+        board.appendChild(cell);
+      });
+
+      setTimeout(drawLines, 100);
+    }
+
+    function getCellCenter(num) {
+      const cell = board.querySelector(`.cell[data-num="${num}"]`);
+      const boardRect = board.getBoundingClientRect();
+      const cellRect = cell.getBoundingClientRect();
+
+      return {
+        x: cellRect.left - boardRect.left + cellRect.width / 2,
+        y: cellRect.top - boardRect.top + cellRect.height / 2
+      };
+    }
+
+    function drawLines() {
+      linesSvg.innerHTML = "";
+      linesSvg.setAttribute("viewBox", `0 0 ${board.clientWidth} ${board.clientHeight}`);
+
+      Object.entries(snakes).forEach(([from, to]) => {
+        const start = getCellCenter(Number(from));
+        const end = getCellCenter(Number(to));
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", start.x);
+        line.setAttribute("y1", start.y);
+        line.setAttribute("x2", end.x);
+        line.setAttribute("y2", end.y);
+        line.setAttribute("class", "snake-line");
+        linesSvg.appendChild(line);
+      });
+
+      Object.entries(ladders).forEach(([from, to]) => {
+        const start = getCellCenter(Number(from));
+        const end = getCellCenter(Number(to));
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", start.x);
+        line.setAttribute("y1", start.y);
+        line.setAttribute("x2", end.x);
+        line.setAttribute("y2", end.y);
+        line.setAttribute("class", "ladder-line");
+        linesSvg.appendChild(line);
+      });
+    }
+
+    function openSettings() {
+      settingsModal.classList.add("show");
+    }
+
+    function closeSettings() {
+      settingsModal.classList.remove("show");
+    }
+
+    function saveSettings() {
+      const count = Number(playerCountInput.value);
+
+      if (count < 2 || count > 6) {
+        statusBox.innerHTML = "Jumlah pemain minimal 2 dan maksimal 6.";
+        return;
+      }
+
+      players = Array.from({ length: count }, (_, i) => ({
+        name: `Pemain ${i + 1}`,
+        position: 1,
+        color: playerColors[i]
+      }));
+
+      currentPlayer = 0;
+      gameStarted = true;
+      gameOver = false;
+      rollBtn.disabled = false;
+      diceBox.textContent = "🎲";
+
+      renderTokens();
+      renderPlayersMini();
+      updateTurnDisplay();
+
+      statusBox.innerHTML = `<b>${players[currentPlayer].name}</b> mulai duluan. Tekan tombol <b>Putar Dadu</b>.`;
+      closeSettings();
+    }
+
+    function renderTokens() {
+      tokensLayer.innerHTML = "";
+
+      players.forEach((player, index) => {
+        const token = document.createElement("div");
+        token.className = "token";
+        token.id = `token-${index}`;
+        token.textContent = index + 1;
+        token.style.background = player.color;
+        tokensLayer.appendChild(token);
+        moveToken(index, player.position, true);
+      });
+    }
+
+    function moveToken(playerIndex, position, instant = false) {
+      const token = document.getElementById(`token-${playerIndex}`);
+      if (!token) return;
+
+      const center = getCellCenter(position);
+      const boardRect = board.getBoundingClientRect();
+
+      const offsetPattern = [
+        [-7, -7], [7, -7], [-7, 7],
+        [7, 7], [0, -10], [0, 10]
+      ];
+      const offset = offsetPattern[playerIndex] || [0, 0];
+
+      if (instant) {
+        token.style.transition = "none";
+        setTimeout(() => token.style.transition = "", 40);
+      }
+
+      token.style.left = `${(center.x / boardRect.width) * 100}%`;
+      token.style.top = `${(center.y / boardRect.height) * 100}%`;
+      token.style.marginLeft = `${offset[0]}px`;
+      token.style.marginTop = `${offset[1]}px`;
+
+      token.classList.add("step-pop");
+      setTimeout(() => token.classList.remove("step-pop"), 150);
+    }
+
+    async function walkStepByStep(playerIndex, from, to) {
+      const direction = to > from ? 1 : -1;
+      let position = from;
+
+      while (position !== to) {
+        position += direction;
+        players[playerIndex].position = position;
+        moveToken(playerIndex, position);
+        renderPlayersMini();
+        updateTurnDisplay();
+        statusBox.innerHTML = `<b>${players[playerIndex].name}</b> berjalan ke kotak <b>${position}</b>.`;
+        await sleep(360);
+      }
+    }
+
+    function renderPlayersMini() {
+      playersMini.innerHTML = "";
+
+      players.forEach((player, index) => {
+        const item = document.createElement("div");
+        item.className = "player-mini" + (index === currentPlayer && !gameOver ? " active" : "");
+        item.innerHTML = `
+          <span style="color:${player.color}">${player.name}</span>
+          <span>Posisi: ${player.position}</span>
+        `;
+        playersMini.appendChild(item);
+      });
+    }
+
+    function updateTurnDisplay() {
+      if (!players.length) {
+        turnPlayer.textContent = "Belum diatur";
+        return;
+      }
+      turnPlayer.textContent = players[currentPlayer].name;
+    }
+
+    function showPunishmentPopup(position) {
+      return new Promise(resolve => {
+        punishmentText.innerHTML = `anda mendapatkan hukuma<br><small>Anda berada di kotak ${position}</small>`;
+        popupCloseCallback = resolve;
+        punishmentModal.classList.add("show");
+      });
+    }
+
+    function closePunishmentPopup() {
+      punishmentModal.classList.remove("show");
+      if (popupCloseCallback) {
+        popupCloseCallback();
+        popupCloseCallback = null;
+      }
+    }
+
+    function rollDice() {
+      if (!gameStarted || gameOver) return;
+
+      rollBtn.disabled = true;
+      diceBox.classList.add("rolling");
+
+      const diceInterval = setInterval(() => {
+        diceBox.textContent = Math.floor(Math.random() * 6) + 1;
+      }, 90);
+
+      setTimeout(() => {
+        clearInterval(diceInterval);
+        diceBox.classList.remove("rolling");
+        const diceValue = Math.floor(Math.random() * 6) + 1;
+        diceBox.textContent = diceValue;
+        playTurn(diceValue);
+      }, 900);
+    }
+
+    async function playTurn(diceValue) {
+      const player = players[currentPlayer];
+      const playerIndex = currentPlayer;
+      const oldPosition = player.position;
+      const targetPosition = oldPosition + diceValue;
+
+      if (targetPosition > 100) {
+        statusBox.innerHTML = `<b>${player.name}</b> mendapat <b>${diceValue}</b>, tapi langkah melebihi 100. Pion tetap di kotak <b>${oldPosition}</b>.`;
+        nextPlayer();
+        return;
+      }
+
+      statusBox.innerHTML = `<b>${player.name}</b> mendapat <b>${diceValue}</b>. Pion mulai berjalan...`;
+      await sleep(300);
+
+      await walkStepByStep(playerIndex, oldPosition, targetPosition);
+
+      let message = `<b>${player.name}</b> mendapat <b>${diceValue}</b>, maju dari ${oldPosition} ke <b>${targetPosition}</b>.`;
+
+      if (snakes[player.position]) {
+        const snakeHead = player.position;
+        const downTo = snakes[player.position];
+        message += `<br>Kena <b>ular</b> di ${snakeHead}, turun ke <b>${downTo}</b>.`;
+        statusBox.innerHTML = message;
+        await sleep(550);
+        await walkStepByStep(playerIndex, snakeHead, downTo);
+      } else if (ladders[player.position]) {
+        const ladderStart = player.position;
+        const upTo = ladders[player.position];
+        message += `<br>Kena <b>tangga</b> di ${ladderStart}, naik ke <b>${upTo}</b>.`;
+        statusBox.innerHTML = message;
+        await sleep(550);
+        await walkStepByStep(playerIndex, ladderStart, upTo);
+      }
+
+      if (punishmentCells.includes(player.position)) {
+        statusBox.innerHTML += `<br><b>${player.name}</b> berada di kotak hukuman.`;
+        await sleep(320);
+        await showPunishmentPopup(player.position);
+      }
+
+      if (player.position === 100) {
+        gameOver = true;
+        rollBtn.disabled = true;
+        renderPlayersMini();
+        updateTurnDisplay();
+        statusBox.innerHTML = `🎉 <b>${player.name} menang!</b>`;
+        return;
+      }
+
+      statusBox.innerHTML = message;
+      nextPlayer();
+    }
+
+    function nextPlayer() {
+      setTimeout(() => {
+        if (gameOver) return;
+        currentPlayer = (currentPlayer + 1) % players.length;
+        renderPlayersMini();
+        updateTurnDisplay();
+        statusBox.innerHTML += `<br><br>Giliran berikutnya: <b>${players[currentPlayer].name}</b>.`;
+        rollBtn.disabled = false;
+      }, 550);
+    }
+
+    openSettingsBtn.addEventListener("click", openSettings);
+    closeSettingsBtn.addEventListener("click", closeSettings);
+    saveSettingsBtn.addEventListener("click", saveSettings);
+    closePunishmentBtn.addEventListener("click", closePunishmentPopup);
+    rollBtn.addEventListener("click", rollDice);
+
+    settingsModal.addEventListener("click", (e) => {
+      if (e.target === settingsModal) closeSettings();
+    });
+
+    punishmentModal.addEventListener("click", (e) => {
+      if (e.target === punishmentModal) closePunishmentPopup();
+    });
+
+    window.addEventListener("resize", () => {
+      drawLines();
+      players.forEach((player, index) => moveToken(index, player.position, true));
+    });
+
+    createBoard();
+    updateTurnDisplay();
+    rollBtn.disabled = true;
+  </script>
+</body>
+</html>
