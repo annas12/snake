@@ -78,28 +78,41 @@
       display: grid;
       grid-template-columns: repeat(10, 1fr);
       grid-template-rows: repeat(10, 1fr);
-      background: #fff7fb;
+
+      /* Background papan custom 1:1
+         Upload gambar ke GitHub dengan nama: background-papan.png
+         Contoh ukuran ideal: 1080x1080 atau 1500x1500 */
+      background-color: #fff7fb;
+      background-image: url("background-papan.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+
       overflow: hidden;
     }
 
     .cell {
       position: relative;
-      border: 1px solid rgba(138,19,85,0.18);
+      border: 1px solid rgba(138,19,85,0.34);
       padding: 2px;
       font-size: clamp(8px, 1.9vw, 12px);
-      font-weight: 700;
+      font-weight: 800;
       color: #8a1355;
-      background: #fff5fa;
+
+      /* Kotak transparan agar background 1:1 tetap terlihat */
+      background: rgba(255, 245, 250, 0.20);
+      backdrop-filter: blur(0.4px);
     }
 
-    .cell:nth-child(odd) { background: #ffe8f3; }
-    .cell.snake-head { background: #ffc7de; }
-    .cell.snake-tail { background: #ffe9f2; }
-    .cell.ladder-start { background: #f5d9ff; }
-    .cell.ladder-end { background: #fbeeff; }
+    .cell:nth-child(odd) { background: rgba(255, 232, 243, 0.24); }
+    .cell:nth-child(even) { background: rgba(255, 255, 255, 0.14); }
+    .cell.snake-head { background: rgba(255, 120, 170, 0.30); }
+    .cell.snake-tail { background: rgba(255, 225, 240, 0.22); }
+    .cell.ladder-start { background: rgba(210, 150, 255, 0.30); }
+    .cell.ladder-end { background: rgba(245, 225, 255, 0.22); }
 
     .cell.punishment-cell {
-      background: #ffd8ee;
+      background: rgba(255, 150, 210, 0.34);
       outline: 2px solid #e23d91;
       outline-offset: -2px;
     }
