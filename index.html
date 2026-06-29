@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ular Tangga Bercanda Pink Edition</title>
+  <title>Ular Tangga Bercanda</title>
   <style>
     * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
 
     body {
       margin: 0;
-      background: linear-gradient(180deg, #ffd9ec 0%, #ffc1de 45%, #ffb0d3 100%);
       min-height: 100vh;
+      background: linear-gradient(180deg, #ffd9ec 0%, #ffc1de 45%, #ffb0d3 100%);
       display: flex;
       justify-content: center;
       align-items: flex-start;
@@ -19,8 +19,7 @@
     }
 
     .app {
-      width: min(100%, 420px);
-      background: linear-gradient(180deg, #ffd9ec 0%, #ffc1de 45%, #ffb0d3 100%);
+      width: min(100%, 430px);
       position: relative;
     }
 
@@ -32,11 +31,11 @@
 
     .title {
       text-align: center;
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 900;
       line-height: 1;
       letter-spacing: 0.8px;
-      margin: 8px 0 6px;
+      margin: 8px 54px 8px;
       text-transform: uppercase;
       color: #8a1355;
       text-shadow: 0 2px 0 rgba(255,255,255,0.45);
@@ -58,17 +57,15 @@
       box-shadow: 0 6px 14px rgba(180,40,115,0.18);
     }
 
-    .settings-btn:hover { background: linear-gradient(180deg, #ffd6ea 0%, #ffb3d7 100%); }
-
     .board-frame {
-      border: 3px solid #b42873;
-      background: linear-gradient(180deg, #ffe5f1 0%, #ffcfe4 100%);
+      border: 4px solid #b42873;
+      background: #ffcae2;
       padding: 6px;
       aspect-ratio: 1 / 1;
       position: relative;
       overflow: hidden;
-      border-radius: 24px;
-      box-shadow: 0 12px 30px rgba(180,40,115,0.18);
+      border-radius: 30px;
+      box-shadow: 0 14px 34px rgba(180,40,115,0.22);
     }
 
     .board {
@@ -79,106 +76,60 @@
       grid-template-columns: repeat(10, 1fr);
       grid-template-rows: repeat(10, 1fr);
 
-      /* Background papan custom 1:1
-         Upload gambar ke GitHub dengan nama: background-papan.jpeg
-         Contoh ukuran ideal: 1080x1080 atau 1500x1500 */
       background-color: #fff7fb;
       background-image: url("background-papan.jpeg");
-      background-size: cover;
+      background-size: 100% 100%;
       background-position: center;
       background-repeat: no-repeat;
 
+      border-radius: 22px;
       overflow: hidden;
     }
 
+    /* Kotak dibuat sebagai area klik/posisi saja, tidak menutupi gambar */
     .cell {
       position: relative;
-      border: 1px solid rgba(138,19,85,0.34);
-      padding: 2px;
-      font-size: clamp(8px, 1.9vw, 12px);
-      font-weight: 800;
-      color: #8a1355;
-
-      /* Kotak transparan agar background 1:1 tetap terlihat */
-      background: rgba(255, 245, 250, 0.20);
-      backdrop-filter: blur(0.4px);
+      border: 0.6px solid rgba(138, 19, 85, 0.20);
+      background: transparent;
+      padding: 0;
+      font-size: 0;
+      color: transparent;
     }
 
-    .cell:nth-child(odd) { background: rgba(255, 232, 243, 0.24); }
-    .cell:nth-child(even) { background: rgba(255, 255, 255, 0.14); }
-    .cell.snake-head { background: rgba(255, 120, 170, 0.30); }
-    .cell.snake-tail { background: rgba(255, 225, 240, 0.22); }
-    .cell.ladder-start { background: rgba(210, 150, 255, 0.30); }
-    .cell.ladder-end { background: rgba(245, 225, 255, 0.22); }
-
-    .cell.punishment-cell {
-      background: rgba(255, 150, 210, 0.34);
-      outline: 2px solid #e23d91;
-      outline-offset: -2px;
-    }
-
-    .cell-mark {
-      position: absolute;
-      right: 2px;
-      bottom: 1px;
-      font-size: clamp(8px, 1.7vw, 11px);
-    }
-
-    .cell-mark-top {
-      position: absolute;
-      top: 1px;
-      right: 2px;
-      font-size: clamp(8px, 1.7vw, 11px);
-    }
-
+    /* Semua marker bawaan aplikasi disembunyikan karena sudah ada di gambar background */
+    .cell-mark,
+    .cell-mark-top,
     .lines {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 2;
-    }
-
-    .snake-line {
-      stroke: #e33d86;
-      stroke-width: 6;
-      stroke-linecap: round;
-      stroke-dasharray: 8 8;
-      opacity: 0.82;
-    }
-
-    .ladder-line {
-      stroke: #b54bff;
-      stroke-width: 6;
-      stroke-linecap: round;
-      opacity: 0.82;
+      display: none !important;
     }
 
     .tokens {
       position: absolute;
-      inset: 10px;
-      z-index: 3;
+      inset: 0;
+      z-index: 5;
       pointer-events: none;
     }
 
     .token {
       position: absolute;
-      width: 18px;
-      height: 18px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
       color: white;
       display: grid;
       place-items: center;
-      font-size: 10px;
-      font-weight: 800;
-      border: 2px solid white;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      font-size: 12px;
+      font-weight: 900;
+      border: 3px solid white;
+      box-shadow: 0 3px 9px rgba(0,0,0,0.45);
       transform: translate(-50%, -50%);
       transition: left 0.34s ease, top 0.34s ease, transform 0.18s ease;
+      z-index: 10;
     }
 
-    .token.step-pop { transform: translate(-50%, -50%) scale(1.18); }
+    .token.step-pop {
+      transform: translate(-50%, -50%) scale(1.2);
+    }
 
     .bottom-row {
       margin-top: 14px;
@@ -192,7 +143,7 @@
     .dice-box {
       border: 2px solid #c42f7d;
       background: linear-gradient(180deg, #fff0f7 0%, #ffd8e9 100%);
-      min-height: 110px;
+      min-height: 104px;
       padding: 12px;
       display: flex;
       align-items: center;
@@ -209,11 +160,9 @@
     }
 
     .turn-icon {
-      font-size: 42px;
+      font-size: 40px;
       line-height: 1;
     }
-
-    .turn-text { line-height: 1.1; }
 
     .turn-label {
       font-size: 18px;
@@ -236,14 +185,14 @@
     }
 
     .dice {
-      width: 74px;
-      height: 74px;
+      width: 68px;
+      height: 68px;
       border: 2px solid #b42873;
       border-radius: 18px;
       background: linear-gradient(180deg, #fff8fc 0%, #ffd9eb 100%);
       display: grid;
       place-items: center;
-      font-size: 40px;
+      font-size: 38px;
       font-weight: 900;
       box-shadow: inset 0 -5px 0 rgba(180,40,115,0.12), 0 8px 16px rgba(180,40,115,0.12);
       color: #8a1355;
@@ -259,18 +208,18 @@
 
     .roll-btn {
       width: 100%;
-      border: 1.8px solid #333;
-      background: #fff;
-      color: #6d174a;
+      border: 2px solid #b42873;
+      background: linear-gradient(180deg, #ff4fa0 0%, #e83e8c 100%);
+      color: #fff;
       font-weight: 900;
-      padding: 11px 10px;
+      padding: 10px 8px;
       cursor: pointer;
-      border-radius: 10px;
+      border-radius: 14px;
       text-transform: uppercase;
-      font-size: 14px;
+      font-size: 13px;
+      box-shadow: 0 8px 18px rgba(232,62,140,0.28);
     }
 
-    .roll-btn:hover { background: linear-gradient(180deg, #ff5ca8 0%, #dc2f7f 100%); }
     .roll-btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
     .status-box {
@@ -349,12 +298,14 @@
 
     .modal-input {
       width: 100%;
-      border: 2px solid #666;
-      background: #fff7fb;
+      border: 2px solid #d94c95;
+      background: #fff9fc;
       padding: 12px;
       font-size: 16px;
       margin-bottom: 14px;
       outline: none;
+      border-radius: 12px;
+      color: #6d174a;
     }
 
     .modal-actions {
@@ -364,12 +315,14 @@
     }
 
     .modal-btn {
-      border: 2px solid #333;
-      background: #fff7fb;
+      border: 2px solid #b42873;
+      background: #fff8fc;
       padding: 12px;
       font-weight: 900;
       cursor: pointer;
       text-transform: uppercase;
+      color: #8a1355;
+      border-radius: 12px;
     }
 
     .modal-btn.primary {
@@ -397,13 +350,14 @@
     }
 
     @media (max-width: 420px) {
-      .title { font-size: 22px; }
+      body { padding: 8px; }
+      .title { font-size: 21px; }
       .bottom-row { gap: 10px; }
-      .info-box, .dice-box { min-height: 102px; }
+      .info-box, .dice-box { min-height: 98px; }
       .turn-label { font-size: 16px; }
       .turn-player { font-size: 13px; }
-      .dice { width: 66px; height: 66px; font-size: 36px; }
-      .token { width: 16px; height: 16px; font-size: 9px; }
+      .dice { width: 62px; height: 62px; font-size: 34px; }
+      .token { width: 21px; height: 21px; font-size: 11px; }
     }
   </style>
 </head>
@@ -425,7 +379,7 @@
       <div class="info-box">
         <div class="turn-wrap">
           <div class="turn-icon">♟️</div>
-          <div class="turn-text">
+          <div>
             <div class="turn-label">Giliran :</div>
             <div id="turnPlayer" class="turn-player">Belum diatur</div>
           </div>
@@ -440,10 +394,7 @@
       </div>
     </div>
 
-    <div id="statusBox" class="status-box">
-      Klik icon setting terlebih dahulu untuk mengatur jumlah pemain, lalu mulai permainan.
-    </div>
-
+    <div id="statusBox" class="status-box"></div>
     <div id="playersMini" class="players-mini"></div>
   </div>
 
@@ -463,7 +414,7 @@
     <div class="modal-box punishment-box">
       <div class="punishment-icon">⚠️</div>
       <div class="punishment-title">Hukuman</div>
-      <div id="punishmentText" class="punishment-text">anda mendapatkan hukuma</div>
+      <div id="punishmentText" class="punishment-text">anda mendapatkan hukuman</div>
       <button class="modal-btn primary" id="closePunishmentBtn">Mengerti</button>
     </div>
   </div>
@@ -471,7 +422,6 @@
   <script>
     const board = document.getElementById("board");
     const tokensLayer = document.getElementById("tokens");
-    const linesSvg = document.getElementById("lines");
     const diceBox = document.getElementById("dice");
     const rollBtn = document.getElementById("rollBtn");
     const statusBox = document.getElementById("statusBox");
@@ -489,13 +439,27 @@
     const closePunishmentBtn = document.getElementById("closePunishmentBtn");
 
     const snakes = {
-      98: 78, 95: 75, 92: 88, 83: 63, 73: 53,
-      64: 44, 59: 39, 48: 28, 36: 16, 17: 7
+      99: 80,
+      98: 83,
+      95: 91,
+      89: 67,
+      79: 57,
+      76: 28,
+      44: 16,
+      40: 5,
+      27: 7
     };
 
     const ladders = {
-      3: 22, 8: 30, 15: 45, 21: 42, 28: 76,
-      50: 67, 57: 79, 66: 89, 71: 91, 80: 99
+      1: 42,
+      8: 30,
+      19: 41,
+      22: 39,
+      45: 75,
+      54: 72,
+      67: 90,
+      80: 99,
+      91: 100
     };
 
     const punishmentCells = [5, 19, 27, 31, 40];
@@ -518,6 +482,7 @@
       for (let row = 9; row >= 0; row--) {
         const start = row * 10 + 1;
         const nums = Array.from({ length: 10 }, (_, i) => start + i);
+
         if ((9 - row) % 2 === 0) nums.reverse();
         displayNumbers.push(...nums);
       }
@@ -526,31 +491,8 @@
         const cell = document.createElement("div");
         cell.className = "cell";
         cell.dataset.num = num;
-        cell.innerHTML = `<span>${num}</span>`;
-
-        if (snakes[num]) {
-          cell.classList.add("snake-head");
-          cell.innerHTML += `<span class="cell-mark">🐍</span>`;
-        }
-
-        if (Object.values(snakes).includes(num)) cell.classList.add("snake-tail");
-
-        if (ladders[num]) {
-          cell.classList.add("ladder-start");
-          cell.innerHTML += `<span class="cell-mark">🪜</span>`;
-        }
-
-        if (Object.values(ladders).includes(num)) cell.classList.add("ladder-end");
-
-        if (punishmentCells.includes(num)) {
-          cell.classList.add("punishment-cell");
-          cell.innerHTML += `<span class="cell-mark-top">⚠️</span>`;
-        }
-
         board.appendChild(cell);
       });
-
-      setTimeout(drawLines, 100);
     }
 
     function getCellCenter(num) {
@@ -562,35 +504,6 @@
         x: cellRect.left - boardRect.left + cellRect.width / 2,
         y: cellRect.top - boardRect.top + cellRect.height / 2
       };
-    }
-
-    function drawLines() {
-      linesSvg.innerHTML = "";
-      linesSvg.setAttribute("viewBox", `0 0 ${board.clientWidth} ${board.clientHeight}`);
-
-      Object.entries(snakes).forEach(([from, to]) => {
-        const start = getCellCenter(Number(from));
-        const end = getCellCenter(Number(to));
-        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        line.setAttribute("x1", start.x);
-        line.setAttribute("y1", start.y);
-        line.setAttribute("x2", end.x);
-        line.setAttribute("y2", end.y);
-        line.setAttribute("class", "snake-line");
-        linesSvg.appendChild(line);
-      });
-
-      Object.entries(ladders).forEach(([from, to]) => {
-        const start = getCellCenter(Number(from));
-        const end = getCellCenter(Number(to));
-        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        line.setAttribute("x1", start.x);
-        line.setAttribute("y1", start.y);
-        line.setAttribute("x2", end.x);
-        line.setAttribute("y2", end.y);
-        line.setAttribute("class", "ladder-line");
-        linesSvg.appendChild(line);
-      });
     }
 
     function openSettings() {
@@ -605,7 +518,6 @@
       const count = Number(playerCountInput.value);
 
       if (count < 2 || count > 6) {
-        statusBox.innerHTML = "Jumlah pemain minimal 2 dan maksimal 6.";
         return;
       }
 
@@ -624,8 +536,6 @@
       renderTokens();
       renderPlayersMini();
       updateTurnDisplay();
-
-      statusBox.innerHTML = `<b>${players[currentPlayer].name}</b> mulai duluan. Tekan tombol <b>Putar Dadu</b>.`;
       closeSettings();
     }
 
@@ -680,7 +590,6 @@
         moveToken(playerIndex, position);
         renderPlayersMini();
         updateTurnDisplay();
-        statusBox.innerHTML = `<b>${players[playerIndex].name}</b> berjalan ke kotak <b>${position}</b>.`;
         await sleep(360);
       }
     }
@@ -700,16 +609,12 @@
     }
 
     function updateTurnDisplay() {
-      if (!players.length) {
-        turnPlayer.textContent = "Belum diatur";
-        return;
-      }
-      turnPlayer.textContent = players[currentPlayer].name;
+      turnPlayer.textContent = players.length ? players[currentPlayer].name : "Belum diatur";
     }
 
     function showPunishmentPopup(position) {
       return new Promise(resolve => {
-        punishmentText.innerHTML = `anda mendapatkan hukuma<br><small>Anda berada di kotak ${position}</small>`;
+        punishmentText.innerHTML = `anda mendapatkan hukuman<br><small>Anda berada di kotak ${position}</small>`;
         popupCloseCallback = resolve;
         punishmentModal.classList.add("show");
       });
@@ -749,37 +654,26 @@
       const targetPosition = oldPosition + diceValue;
 
       if (targetPosition > 100) {
-        statusBox.innerHTML = `<b>${player.name}</b> mendapat <b>${diceValue}</b>, tapi langkah melebihi 100. Pion tetap di kotak <b>${oldPosition}</b>.`;
         nextPlayer();
         return;
       }
 
-      statusBox.innerHTML = `<b>${player.name}</b> mendapat <b>${diceValue}</b>. Pion mulai berjalan...`;
-      await sleep(300);
-
       await walkStepByStep(playerIndex, oldPosition, targetPosition);
 
-      let message = `<b>${player.name}</b> mendapat <b>${diceValue}</b>, maju dari ${oldPosition} ke <b>${targetPosition}</b>.`;
-
       if (snakes[player.position]) {
-        const snakeHead = player.position;
-        const downTo = snakes[player.position];
-        message += `<br>Kena <b>ular</b> di ${snakeHead}, turun ke <b>${downTo}</b>.`;
-        statusBox.innerHTML = message;
-        await sleep(550);
-        await walkStepByStep(playerIndex, snakeHead, downTo);
+        const from = player.position;
+        const to = snakes[player.position];
+        await sleep(450);
+        await walkStepByStep(playerIndex, from, to);
       } else if (ladders[player.position]) {
-        const ladderStart = player.position;
-        const upTo = ladders[player.position];
-        message += `<br>Kena <b>tangga</b> di ${ladderStart}, naik ke <b>${upTo}</b>.`;
-        statusBox.innerHTML = message;
-        await sleep(550);
-        await walkStepByStep(playerIndex, ladderStart, upTo);
+        const from = player.position;
+        const to = ladders[player.position];
+        await sleep(450);
+        await walkStepByStep(playerIndex, from, to);
       }
 
       if (punishmentCells.includes(player.position)) {
-        statusBox.innerHTML += `<br><b>${player.name}</b> berada di kotak hukuman.`;
-        await sleep(320);
+        await sleep(300);
         await showPunishmentPopup(player.position);
       }
 
@@ -788,11 +682,10 @@
         rollBtn.disabled = true;
         renderPlayersMini();
         updateTurnDisplay();
-        statusBox.innerHTML = `🎉 <b>${player.name} menang!</b>`;
+        setTimeout(() => alert(`${player.name} menang!`), 200);
         return;
       }
 
-      statusBox.innerHTML = message;
       nextPlayer();
     }
 
@@ -802,9 +695,8 @@
         currentPlayer = (currentPlayer + 1) % players.length;
         renderPlayersMini();
         updateTurnDisplay();
-        statusBox.innerHTML += `<br><br>Giliran berikutnya: <b>${players[currentPlayer].name}</b>.`;
         rollBtn.disabled = false;
-      }, 550);
+      }, 500);
     }
 
     openSettingsBtn.addEventListener("click", openSettings);
@@ -822,7 +714,6 @@
     });
 
     window.addEventListener("resize", () => {
-      drawLines();
       players.forEach((player, index) => moveToken(index, player.position, true));
     });
 
