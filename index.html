@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -384,6 +383,58 @@
       cursor: not-allowed;
     }
 
+
+    /* Mode khusus setelah tombol Start diklik:
+       popup hanya menampilkan timer besar agar fokus */
+    .modal-overlay.timer-focus {
+      background: rgba(138, 19, 85, 0.72);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.timer-focus .modal-box {
+      width: min(86vw, 390px);
+      aspect-ratio: 1 / 1;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: radial-gradient(circle at top, #fff4fb 0%, #ffd1e6 55%, #ff9cca 100%);
+      border: 6px solid #b42873;
+      border-radius: 34px;
+      box-shadow: 0 28px 80px rgba(80, 0, 45, 0.45);
+    }
+
+    .modal-overlay.timer-focus .punishment-image,
+    .modal-overlay.timer-focus .punishment-title,
+    .modal-overlay.timer-focus #startPunishmentBtn {
+      display: none !important;
+    }
+
+    .modal-overlay.timer-focus .punishment-timer {
+      display: grid !important;
+      place-items: center;
+      width: 230px;
+      height: 230px;
+      margin: 0;
+      padding: 0;
+      border-radius: 50%;
+      border: 8px solid #b42873;
+      background: #fff8fc;
+      color: #8a1355;
+      font-size: 112px;
+      font-weight: 900;
+      line-height: 1;
+      box-shadow:
+        inset 0 -10px 0 rgba(180, 40, 115, 0.12),
+        0 18px 45px rgba(180, 40, 115, 0.35);
+      animation: timerPulse 1s ease-in-out infinite;
+    }
+
+    @keyframes timerPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+      100% { transform: scale(1); }
+    }
+
     @media (max-width: 420px) {
       body { padding: 8px; }
       .title { font-size: 21px; }
@@ -465,6 +516,7 @@
 
     const settingsModal = document.getElementById("settingsModal");
     const punishmentModal = document.getElementById("punishmentModal");
+    const punishmentImage = document.getElementById("punishmentImage");
     const punishmentTitle = document.getElementById("punishmentTitle");
     const startPunishmentBtn = document.getElementById("startPunishmentBtn");
     const punishmentTimer = document.getElementById("punishmentTimer");
@@ -492,6 +544,27 @@
     };
 
     const punishmentCells = [4, 8, 12, 16, 24, 28, 36, 39, 46, 50, 54, 60, 63, 73, 76, 82, 86, 91, 97];
+    const punishmentData = {
+      4: { title: "Hukuman Kotak 4", image: "hukuman-4.png" },
+      8: { title: "Hukuman Kotak 8", image: "hukuman-8.png" },
+      12: { title: "Hukuman Kotak 12", image: "hukuman-12.png" },
+      16: { title: "Hukuman Kotak 16", image: "hukuman-16.png" },
+      24: { title: "Hukuman Kotak 24", image: "hukuman-24.png" },
+      28: { title: "Hukuman Kotak 28", image: "hukuman-28.png" },
+      36: { title: "Hukuman Kotak 36", image: "hukuman-36.png" },
+      39: { title: "Hukuman Kotak 39", image: "hukuman-39.png" },
+      46: { title: "Hukuman Kotak 46", image: "hukuman-46.png" },
+      50: { title: "Hukuman Kotak 50", image: "hukuman-50.png" },
+      54: { title: "Hukuman Kotak 54", image: "hukuman-54.png" },
+      60: { title: "Hukuman Kotak 60", image: "hukuman-60.png" },
+      63: { title: "Hukuman Kotak 63", image: "hukuman-63.png" },
+      73: { title: "Hukuman Kotak 73", image: "hukuman-73.png" },
+      76: { title: "Hukuman Kotak 76", image: "hukuman-76.png" },
+      82: { title: "Hukuman Kotak 82", image: "hukuman-82.png" },
+      86: { title: "Hukuman Kotak 86", image: "hukuman-86.png" },
+      91: { title: "Hukuman Kotak 91", image: "hukuman-91.png" },
+      97: { title: "Hukuman Kotak 97", image: "hukuman-97.png" }
+    };
     const playerColors = ["#e53935", "#1e88e5", "#43a047", "#8e24aa", "#fb8c00", "#00897b"];
 
     let players = [];
@@ -643,7 +716,10 @@
 
     function showPunishmentPopup(position) {
       return new Promise(resolve => {
-        punishmentTitle.innerHTML = `TANTANGAN HUKUMAN<br><small>Kotak ${position}</small>`;
+        const data = punishmentData[position] || { title: `Hukuman Kotak ${position}`, image: "hukuman.png" };
+        punishmentImage.src = data.image;
+        punishmentTitle.innerHTML = `${data.title}<br><small>Kotak ${position}</small>`;
+        punishmentModal.classList.remove("timer-focus");
         punishmentTimer.textContent = "15";
         punishmentTimer.classList.remove("show");
         startPunishmentBtn.disabled = false;
@@ -657,6 +733,7 @@
       if (!popupCloseCallback) return;
 
       let seconds = 15;
+      punishmentModal.classList.add("timer-focus");
       startPunishmentBtn.disabled = true;
       startPunishmentBtn.textContent = "Berjalan...";
       punishmentTimer.textContent = seconds;
@@ -680,6 +757,7 @@
 
     function closePunishmentPopup() {
       punishmentModal.classList.remove("show");
+      punishmentModal.classList.remove("timer-focus");
 
       if (punishmentCountdownInterval) {
         clearInterval(punishmentCountdownInterval);
