@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -77,7 +78,7 @@
       grid-template-rows: repeat(10, 1fr);
 
       background-color: #fff7fb;
-      background-image: url("backgrond-papan.png");
+      background-image: url("background-papan.png");
       background-size: 100% 100%;
       background-position: center;
       background-repeat: no-repeat;
@@ -349,6 +350,40 @@
       color: #6d174a;
     }
 
+
+    .punishment-image {
+      width: min(100%, 260px);
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 12px;
+      border-radius: 18px;
+      border: 2px solid #b42873;
+      background: #fff8fc;
+      box-shadow: 0 10px 24px rgba(180,40,115,0.18);
+    }
+
+    .punishment-timer {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.65);
+      border: 2px dashed #d94c95;
+      color: #8a1355;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .punishment-timer.show {
+      display: block;
+    }
+
+    .modal-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
     @media (max-width: 420px) {
       body { padding: 8px; }
       .title { font-size: 21px; }
@@ -412,10 +447,10 @@
 
   <div id="punishmentModal" class="modal-overlay">
     <div class="modal-box punishment-box">
-      <div class="punishment-icon">⚠️</div>
-      <div class="punishment-title">Hukuman</div>
-      <div id="punishmentText" class="punishment-text">anda mendapatkan hukuman</div>
-      <button class="modal-btn primary" id="closePunishmentBtn">Mengerti</button>
+      <img id="punishmentImage" class="punishment-image" src="hukuman.png" alt="Hukuman">
+      <div id="punishmentTitle" class="punishment-title">TANTANGAN HUKUMAN</div>
+      <button class="modal-btn primary" id="startPunishmentBtn">Start</button>
+      <div id="punishmentTimer" class="punishment-timer">15</div>
     </div>
   </div>
 
@@ -430,39 +465,33 @@
 
     const settingsModal = document.getElementById("settingsModal");
     const punishmentModal = document.getElementById("punishmentModal");
-    const punishmentText = document.getElementById("punishmentText");
+    const punishmentTitle = document.getElementById("punishmentTitle");
+    const startPunishmentBtn = document.getElementById("startPunishmentBtn");
+    const punishmentTimer = document.getElementById("punishmentTimer");
     const playerCountInput = document.getElementById("playerCount");
 
     const openSettingsBtn = document.getElementById("openSettingsBtn");
     const closeSettingsBtn = document.getElementById("closeSettingsBtn");
     const saveSettingsBtn = document.getElementById("saveSettingsBtn");
-    const closePunishmentBtn = document.getElementById("closePunishmentBtn");
+    let punishmentCountdownInterval = null;
 
     const snakes = {
-      99: 80,
-      98: 83,
-      95: 91,
-      89: 67,
-      79: 57,
-      76: 28,
-      44: 16,
-      40: 5,
-      27: 7
+      15: 7,
+      44: 22,
+      68: 34,
+      92: 87,
+      98: 77
     };
 
     const ladders = {
-      1: 42,
-      8: 30,
-      19: 41,
-      22: 39,
-      45: 75,
-      54: 72,
-      67: 90,
-      80: 99,
-      91: 100
+      3: 24,
+      27: 35,
+      42: 78,
+      49: 71,
+      67: 95
     };
 
-    const punishmentCells = [5, 19, 27, 31, 40];
+    const punishmentCells = [4, 8, 12, 16, 24, 28, 36, 39, 46, 50, 54, 60, 63, 73, 76, 82, 86, 91, 97];
     const playerColors = ["#e53935", "#1e88e5", "#43a047", "#8e24aa", "#fb8c00", "#00897b"];
 
     let players = [];
@@ -614,14 +643,49 @@
 
     function showPunishmentPopup(position) {
       return new Promise(resolve => {
-        punishmentText.innerHTML = `anda mendapatkan hukuman<br><small>Anda berada di kotak ${position}</small>`;
+        punishmentTitle.innerHTML = `TANTANGAN HUKUMAN<br><small>Kotak ${position}</small>`;
+        punishmentTimer.textContent = "15";
+        punishmentTimer.classList.remove("show");
+        startPunishmentBtn.disabled = false;
+        startPunishmentBtn.textContent = "Start";
         popupCloseCallback = resolve;
         punishmentModal.classList.add("show");
       });
     }
 
+    function startPunishmentTimer() {
+      if (!popupCloseCallback) return;
+
+      let seconds = 15;
+      startPunishmentBtn.disabled = true;
+      startPunishmentBtn.textContent = "Berjalan...";
+      punishmentTimer.textContent = seconds;
+      punishmentTimer.classList.add("show");
+
+      if (punishmentCountdownInterval) {
+        clearInterval(punishmentCountdownInterval);
+      }
+
+      punishmentCountdownInterval = setInterval(() => {
+        seconds--;
+        punishmentTimer.textContent = seconds;
+
+        if (seconds <= 0) {
+          clearInterval(punishmentCountdownInterval);
+          punishmentCountdownInterval = null;
+          closePunishmentPopup();
+        }
+      }, 1000);
+    }
+
     function closePunishmentPopup() {
       punishmentModal.classList.remove("show");
+
+      if (punishmentCountdownInterval) {
+        clearInterval(punishmentCountdownInterval);
+        punishmentCountdownInterval = null;
+      }
+
       if (popupCloseCallback) {
         popupCloseCallback();
         popupCloseCallback = null;
@@ -702,7 +766,7 @@
     openSettingsBtn.addEventListener("click", openSettings);
     closeSettingsBtn.addEventListener("click", closeSettings);
     saveSettingsBtn.addEventListener("click", saveSettings);
-    closePunishmentBtn.addEventListener("click", closePunishmentPopup);
+    startPunishmentBtn.addEventListener("click", startPunishmentTimer);
     rollBtn.addEventListener("click", rollDice);
 
     settingsModal.addEventListener("click", (e) => {
@@ -710,7 +774,8 @@
     });
 
     punishmentModal.addEventListener("click", (e) => {
-      if (e.target === punishmentModal) closePunishmentPopup();
+      // Modal hukuman tidak ditutup dengan klik luar.
+      // Pemain harus klik Start dan menunggu timer selesai.
     });
 
     window.addEventListener("resize", () => {
