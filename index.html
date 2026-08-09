@@ -885,12 +885,240 @@
       }
     }
 
+
+    /* Neon intimate glow theme */
+    :root {
+      --neon-pink: #ff2fa3;
+      --neon-hot: #ff007f;
+      --neon-soft: #ffd6ec;
+      --neon-cyan: #29f6ff;
+      --neon-purple: #9b5cff;
+      --neon-deep: #7a0b4f;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 20% 12%, rgba(255, 47, 163, 0.28), transparent 30%),
+        radial-gradient(circle at 82% 18%, rgba(41, 246, 255, 0.22), transparent 27%),
+        radial-gradient(circle at 50% 88%, rgba(155, 92, 255, 0.20), transparent 35%),
+        linear-gradient(180deg, #2a031c 0%, #5d0a3c 46%, #230218 100%);
+    }
+
+    .neon-title {
+      display: grid;
+      gap: 2px;
+      color: #fff4fb !important;
+      text-shadow:
+        0 0 4px #ffffff,
+        0 0 8px var(--neon-pink),
+        0 0 16px var(--neon-pink),
+        0 0 28px var(--neon-hot),
+        0 0 44px var(--neon-purple);
+      filter: drop-shadow(0 0 14px rgba(255, 47, 163, 0.65));
+      animation: neonBreath 2.6s ease-in-out infinite;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .neon-title span {
+      display: block;
+      position: relative;
+      background: linear-gradient(
+        90deg,
+        #fff 0%,
+        #ffd6ec 18%,
+        #ff2fa3 35%,
+        #29f6ff 50%,
+        #ff2fa3 65%,
+        #ffd6ec 82%,
+        #fff 100%
+      );
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: neonRun 3s linear infinite;
+    }
+
+    .neon-title span::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      color: transparent;
+      text-shadow:
+        0 0 12px var(--neon-pink),
+        0 0 24px var(--neon-hot),
+        0 0 38px var(--neon-cyan);
+      opacity: 0.75;
+    }
+
+    .neon-title::before {
+      content: "";
+      position: absolute;
+      left: -18%;
+      top: -12%;
+      width: 28%;
+      height: 124%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.85), transparent);
+      transform: skewX(-18deg);
+      filter: blur(1px);
+      animation: neonSweep 2.8s ease-in-out infinite;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    @keyframes neonRun {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
+    }
+
+    @keyframes neonSweep {
+      0% { left: -30%; opacity: 0; }
+      18% { opacity: 0.85; }
+      54% { opacity: 0.95; }
+      100% { left: 108%; opacity: 0; }
+    }
+
+    @keyframes neonBreath {
+      0%, 100% {
+        text-shadow:
+          0 0 4px #ffffff,
+          0 0 8px var(--neon-pink),
+          0 0 16px var(--neon-pink),
+          0 0 28px var(--neon-hot),
+          0 0 44px var(--neon-purple);
+      }
+      50% {
+        text-shadow:
+          0 0 6px #ffffff,
+          0 0 14px var(--neon-cyan),
+          0 0 24px var(--neon-pink),
+          0 0 42px var(--neon-hot),
+          0 0 62px var(--neon-purple);
+      }
+    }
+
+    .board-frame,
+    .info-box,
+    .dice-box,
+    .player-mini,
+    .modal-box {
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.25),
+        0 0 12px rgba(255,47,163,0.42),
+        0 0 26px rgba(255,47,163,0.28),
+        0 0 42px rgba(41,246,255,0.12) !important;
+    }
+
+    .board-frame {
+      border-color: var(--neon-pink) !important;
+      background:
+        linear-gradient(180deg, rgba(255,214,236,0.95), rgba(255,47,163,0.40)) !important;
+    }
+
+    .board-frame::before {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      border-radius: inherit;
+      pointer-events: none;
+      border: 2px solid rgba(41,246,255,0.55);
+      opacity: 0.75;
+      filter: drop-shadow(0 0 12px rgba(41,246,255,0.55));
+      animation: borderPulse 2.4s ease-in-out infinite;
+      z-index: 7;
+    }
+
+    @keyframes borderPulse {
+      0%, 100% { opacity: 0.35; }
+      50% { opacity: 0.95; }
+    }
+
+    .info-box,
+    .dice-box,
+    .player-mini {
+      border-color: rgba(255,47,163,0.95) !important;
+      background:
+        linear-gradient(180deg, rgba(255,235,247,0.96), rgba(255,161,207,0.92)) !important;
+    }
+
+    .dice {
+      border-color: var(--neon-cyan) !important;
+      box-shadow:
+        inset 0 -5px 0 rgba(255,47,163,0.16),
+        0 0 12px rgba(41,246,255,0.55),
+        0 0 24px rgba(255,47,163,0.35) !important;
+    }
+
+    .roll-btn,
+    .modal-btn.primary {
+      background: linear-gradient(90deg, #ff2fa3, #ff007f, #9b5cff, #29f6ff, #ff2fa3) !important;
+      background-size: 300% 100% !important;
+      border-color: rgba(255,255,255,0.65) !important;
+      box-shadow:
+        0 0 10px rgba(255,47,163,0.65),
+        0 0 22px rgba(41,246,255,0.22) !important;
+      animation: neonButtonRun 3.2s linear infinite;
+    }
+
+    @keyframes neonButtonRun {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 300% 50%; }
+    }
+
+    .settings-btn {
+      border-color: var(--neon-cyan) !important;
+      box-shadow:
+        0 0 10px rgba(41,246,255,0.65),
+        0 0 22px rgba(255,47,163,0.35) !important;
+      animation: settingsGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes settingsGlow {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+
+    .modal-overlay.show {
+      background:
+        radial-gradient(circle at 50% 20%, rgba(255,47,163,0.45), transparent 34%),
+        rgba(25, 0, 18, 0.72);
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-box {
+      border-color: var(--neon-pink) !important;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.96), rgba(255,214,236,0.96) 52%, rgba(255,151,203,0.94)) !important;
+    }
+
+    .modal-label,
+    .turn-label,
+    .turn-player,
+    .player-mini {
+      text-shadow: 0 0 8px rgba(255,47,163,0.18);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .neon-title,
+      .neon-title span,
+      .neon-title::before,
+      .board-frame::before,
+      .roll-btn,
+      .modal-btn.primary,
+      .settings-btn,
+      .dice {
+        animation: none !important;
+      }
+    }
+
   </style>
 </head>
 <body>
   <div class="app">
     <div class="topbar">
-      <div class="title">ULAR TANGGA<br>BERCANDA</div>
+      <div class="title neon-title"><span data-text="ULAR TANGGA">ULAR TANGGA</span><span data-text="BERCANDA">BERCANDA</span></div>
       <button class="settings-btn" id="openSettingsBtn" title="Setting">⚙️</button>
     </div>
 
