@@ -351,7 +351,7 @@
 
 
     .punishment-image {
-      width: min(100%, 260px);
+      width: min(100%, 380px);
       aspect-ratio: 1 / 1;
       object-fit: contain;
       display: block;
@@ -435,6 +435,21 @@
       100% { transform: scale(1); }
     }
 
+
+    /* Teks hukuman disembunyikan: popup hanya gambar + tombol Start */
+    #punishmentTitle {
+      display: none !important;
+    }
+
+
+    /* Popup hukuman tanpa teks judul/nomor */
+    #punishmentTitle,
+    .punishment-title,
+    .punishment-text,
+    .punishment-icon {
+      display: none !important;
+    }
+
     @media (max-width: 420px) {
       body { padding: 8px; }
       .title { font-size: 21px; }
@@ -515,8 +530,8 @@
 
   <div id="punishmentModal" class="modal-overlay">
     <div class="modal-box punishment-box">
-      <img id="punishmentImage" class="punishment-image" src="no4.png" alt="Hukuman">
-      <div id="punishmentTitle" class="punishment-title">TANTANGAN HUKUMAN</div>
+      <img id="punishmentImage" class="punishment-image" src="no4.png" alt="">
+      <div id="punishmentTitle" class="punishment-title"></div>
       <button class="modal-btn primary" id="startPunishmentBtn">Start</button>
       <div id="punishmentTimer" class="punishment-timer">15</div>
     </div>
@@ -563,36 +578,36 @@
 
     const punishmentCells = [4, 7, 10, 12, 16, 19, 24, 28, 30, 33, 36, 39, 43, 46, 50, 54, 56, 60, 63, 66, 69, 73, 76, 79, 82, 85, 89, 91, 94, 97];
     const punishmentData = {
-      4: { title: "Hukuman Kotak 4", image: "no4.png" },
-      7: { title: "Hukuman Kotak 7", image: "no7.png" },
-      10: { title: "Hukuman Kotak 10", image: "no10.png" },
-      12: { title: "Hukuman Kotak 12", image: "no12.png" },
-      16: { title: "Hukuman Kotak 16", image: "no16.png" },
-      19: { title: "Hukuman Kotak 19", image: "no19.png" },
-      24: { title: "Hukuman Kotak 24", image: "no24.png" },
-      28: { title: "Hukuman Kotak 28", image: "no28.png" },
-      30: { title: "Hukuman Kotak 30", image: "no30.png" },
-      33: { title: "Hukuman Kotak 33", image: "no33.png" },
-      36: { title: "Hukuman Kotak 36", image: "no36.png" },
-      39: { title: "Hukuman Kotak 39", image: "no39.png" },
-      43: { title: "Hukuman Kotak 43", image: "no43.png" },
-      46: { title: "Hukuman Kotak 46", image: "no46.png" },
-      50: { title: "Hukuman Kotak 50", image: "no50.png" },
-      54: { title: "Hukuman Kotak 54", image: "no54.png" },
-      56: { title: "Hukuman Kotak 56", image: "no56.png" },
-      60: { title: "Hukuman Kotak 60", image: "no60.png" },
-      63: { title: "Hukuman Kotak 63", image: "no63.png" },
-      66: { title: "Hukuman Kotak 66", image: "no66.png" },
-      69: { title: "Hukuman Kotak 69", image: "no69.png" },
-      73: { title: "Hukuman Kotak 73", image: "no73.png" },
-      76: { title: "Hukuman Kotak 76", image: "no76.png" },
-      79: { title: "Hukuman Kotak 79", image: "no79.png" },
-      82: { title: "Hukuman Kotak 82", image: "no82.png" },
-      85: { title: "Hukuman Kotak 85", image: "no85.png" },
-      89: { title: "Hukuman Kotak 89", image: "no89.png" },
-      91: { title: "Hukuman Kotak 91", image: "no91.png" },
-      94: { title: "Hukuman Kotak 94", image: "no94.png" },
-      97: { title: "Hukuman Kotak 97", image: "no97.png" }
+      4: { title: "", image: "no4.png" },
+      7: { title: "", image: "no7.png" },
+      10: { title: "", image: "no10.png" },
+      12: { title: "", image: "no12.png" },
+      16: { title: "", image: "no16.png" },
+      19: { title: "", image: "no19.png" },
+      24: { title: "", image: "no24.png" },
+      28: { title: "", image: "no28.png" },
+      30: { title: "", image: "no30.png" },
+      33: { title: "", image: "no33.png" },
+      36: { title: "", image: "no36.png" },
+      39: { title: "", image: "no39.png" },
+      43: { title: "", image: "no43.png" },
+      46: { title: "", image: "no46.png" },
+      50: { title: "", image: "no50.png" },
+      54: { title: "", image: "no54.png" },
+      56: { title: "", image: "no56.png" },
+      60: { title: "", image: "no60.png" },
+      63: { title: "", image: "no63.png" },
+      66: { title: "", image: "no66.png" },
+      69: { title: "", image: "no69.png" },
+      73: { title: "", image: "no73.png" },
+      76: { title: "", image: "no76.png" },
+      79: { title: "", image: "no79.png" },
+      82: { title: "", image: "no82.png" },
+      85: { title: "", image: "no85.png" },
+      89: { title: "", image: "no89.png" },
+      91: { title: "", image: "no91.png" },
+      94: { title: "", image: "no94.png" },
+      97: { title: "", image: "no97.png" }
     };
     const playerColors = ["#e53935", "#1e88e5", "#43a047", "#8e24aa", "#fb8c00", "#00897b"];
 
@@ -766,7 +781,7 @@
       return new Promise(resolve => {
         const data = punishmentData[position] || { title: `Hukuman Kotak ${position}`, image: "no4.png" };
         punishmentImage.src = data.image;
-        punishmentTitle.innerHTML = `${data.title}<br><small>Kotak ${position}</small>`;
+        punishmentTitle.innerHTML = "";
         punishmentModal.classList.remove("timer-focus");
         punishmentTimer.textContent = formatTimer(punishmentDurationSeconds);
         punishmentTimer.classList.remove("show");
