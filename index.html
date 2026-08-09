@@ -77,7 +77,7 @@
       grid-template-rows: repeat(10, 1fr);
 
       background-color: #fff7fb;
-      background-image: url("backgrond-papan.png");
+      background-image: url("background.png");
       background-size: 100% 100%;
       background-position: center;
       background-repeat: no-repeat;
@@ -412,15 +412,15 @@
     .modal-overlay.timer-focus .punishment-timer {
       display: grid !important;
       place-items: center;
-      width: 230px;
-      height: 230px;
+      width: min(260px, 70vw);
+      height: min(260px, 70vw);
       margin: 0;
       padding: 0;
       border-radius: 50%;
       border: 8px solid #b42873;
       background: #fff8fc;
       color: #8a1355;
-      font-size: 112px;
+      font-size: clamp(56px, 16vw, 112px);
       font-weight: 900;
       line-height: 1;
       box-shadow:
@@ -486,19 +486,36 @@
 
   <div id="settingsModal" class="modal-overlay">
     <div class="modal-box">
-      <div class="modal-title">Setting Pemain</div>
+      <div class="modal-title">Mulai Permainan</div>
+
       <label for="playerCount" class="modal-label">Jumlah Pemain (2 - 6)</label>
       <input type="number" id="playerCount" class="modal-input" min="2" max="6" value="2" />
+
+      <label for="punishmentDuration" class="modal-label">Durasi Hukuman</label>
+      <select id="punishmentDuration" class="modal-input">
+        <option value="10">10 detik</option>
+        <option value="15" selected>15 detik</option>
+        <option value="20">20 detik</option>
+        <option value="25">25 detik</option>
+        <option value="30">30 detik</option>
+        <option value="45">45 detik</option>
+        <option value="60">1 menit</option>
+        <option value="120">2 menit</option>
+        <option value="180">3 menit</option>
+        <option value="240">4 menit</option>
+        <option value="300">5 menit</option>
+      </select>
+
       <div class="modal-actions">
         <button class="modal-btn" id="closeSettingsBtn">Tutup</button>
-        <button class="modal-btn primary" id="saveSettingsBtn">Simpan</button>
+        <button class="modal-btn primary" id="saveSettingsBtn">Mulai</button>
       </div>
     </div>
   </div>
 
   <div id="punishmentModal" class="modal-overlay">
     <div class="modal-box punishment-box">
-      <img id="punishmentImage" class="punishment-image" src="hukuman.png" alt="Hukuman">
+      <img id="punishmentImage" class="punishment-image" src="no4.png" alt="Hukuman">
       <div id="punishmentTitle" class="punishment-title">TANTANGAN HUKUMAN</div>
       <button class="modal-btn primary" id="startPunishmentBtn">Start</button>
       <div id="punishmentTimer" class="punishment-timer">15</div>
@@ -521,6 +538,7 @@
     const startPunishmentBtn = document.getElementById("startPunishmentBtn");
     const punishmentTimer = document.getElementById("punishmentTimer");
     const playerCountInput = document.getElementById("playerCount");
+    const punishmentDurationSelect = document.getElementById("punishmentDuration");
 
     const openSettingsBtn = document.getElementById("openSettingsBtn");
     const closeSettingsBtn = document.getElementById("closeSettingsBtn");
@@ -543,27 +561,38 @@
       67: 95
     };
 
-    const punishmentCells = [4, 8, 12, 16, 24, 28, 36, 39, 46, 50, 54, 60, 63, 73, 76, 82, 86, 91, 97];
+    const punishmentCells = [4, 7, 10, 12, 16, 19, 24, 28, 30, 33, 36, 39, 43, 46, 50, 54, 56, 60, 63, 66, 69, 73, 76, 79, 82, 85, 89, 91, 94, 97];
     const punishmentData = {
-      4: { title: "Hukuman Kotak 4", image: "hukuman-4.png" },
-      8: { title: "Hukuman Kotak 8", image: "hukuman-8.png" },
-      12: { title: "Hukuman Kotak 12", image: "hukuman-12.png" },
-      16: { title: "Hukuman Kotak 16", image: "hukuman-16.png" },
-      24: { title: "Hukuman Kotak 24", image: "hukuman-24.png" },
-      28: { title: "Hukuman Kotak 28", image: "hukuman-28.png" },
-      36: { title: "Hukuman Kotak 36", image: "hukuman-36.png" },
-      39: { title: "Hukuman Kotak 39", image: "hukuman-39.png" },
-      46: { title: "Hukuman Kotak 46", image: "hukuman-46.png" },
-      50: { title: "Hukuman Kotak 50", image: "hukuman-50.png" },
-      54: { title: "Hukuman Kotak 54", image: "hukuman-54.png" },
-      60: { title: "Hukuman Kotak 60", image: "hukuman-60.png" },
-      63: { title: "Hukuman Kotak 63", image: "hukuman-63.png" },
-      73: { title: "Hukuman Kotak 73", image: "hukuman-73.png" },
-      76: { title: "Hukuman Kotak 76", image: "hukuman-76.png" },
-      82: { title: "Hukuman Kotak 82", image: "hukuman-82.png" },
-      86: { title: "Hukuman Kotak 86", image: "hukuman-86.png" },
-      91: { title: "Hukuman Kotak 91", image: "hukuman-91.png" },
-      97: { title: "Hukuman Kotak 97", image: "hukuman-97.png" }
+      4: { title: "Hukuman Kotak 4", image: "no4.png" },
+      7: { title: "Hukuman Kotak 7", image: "no7.png" },
+      10: { title: "Hukuman Kotak 10", image: "no10.png" },
+      12: { title: "Hukuman Kotak 12", image: "no12.png" },
+      16: { title: "Hukuman Kotak 16", image: "no16.png" },
+      19: { title: "Hukuman Kotak 19", image: "no19.png" },
+      24: { title: "Hukuman Kotak 24", image: "no24.png" },
+      28: { title: "Hukuman Kotak 28", image: "no28.png" },
+      30: { title: "Hukuman Kotak 30", image: "no30.png" },
+      33: { title: "Hukuman Kotak 33", image: "no33.png" },
+      36: { title: "Hukuman Kotak 36", image: "no36.png" },
+      39: { title: "Hukuman Kotak 39", image: "no39.png" },
+      43: { title: "Hukuman Kotak 43", image: "no43.png" },
+      46: { title: "Hukuman Kotak 46", image: "no46.png" },
+      50: { title: "Hukuman Kotak 50", image: "no50.png" },
+      54: { title: "Hukuman Kotak 54", image: "no54.png" },
+      56: { title: "Hukuman Kotak 56", image: "no56.png" },
+      60: { title: "Hukuman Kotak 60", image: "no60.png" },
+      63: { title: "Hukuman Kotak 63", image: "no63.png" },
+      66: { title: "Hukuman Kotak 66", image: "no66.png" },
+      69: { title: "Hukuman Kotak 69", image: "no69.png" },
+      73: { title: "Hukuman Kotak 73", image: "no73.png" },
+      76: { title: "Hukuman Kotak 76", image: "no76.png" },
+      79: { title: "Hukuman Kotak 79", image: "no79.png" },
+      82: { title: "Hukuman Kotak 82", image: "no82.png" },
+      85: { title: "Hukuman Kotak 85", image: "no85.png" },
+      89: { title: "Hukuman Kotak 89", image: "no89.png" },
+      91: { title: "Hukuman Kotak 91", image: "no91.png" },
+      94: { title: "Hukuman Kotak 94", image: "no94.png" },
+      97: { title: "Hukuman Kotak 97", image: "no97.png" }
     };
     const playerColors = ["#e53935", "#1e88e5", "#43a047", "#8e24aa", "#fb8c00", "#00897b"];
 
@@ -572,6 +601,7 @@
     let gameStarted = false;
     let gameOver = false;
     let popupCloseCallback = null;
+    let punishmentDurationSeconds = 15;
 
     function sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
@@ -609,15 +639,25 @@
     }
 
     function openSettings() {
+      if (!gameStarted) {
+        closeSettingsBtn.style.display = "none";
+        saveSettingsBtn.textContent = "Mulai";
+      } else {
+        closeSettingsBtn.style.display = "block";
+        saveSettingsBtn.textContent = "Simpan";
+      }
+
       settingsModal.classList.add("show");
     }
 
     function closeSettings() {
+      if (!gameStarted) return;
       settingsModal.classList.remove("show");
     }
 
     function saveSettings() {
       const count = Number(playerCountInput.value);
+      punishmentDurationSeconds = Number(punishmentDurationSelect.value) || 15;
 
       if (count < 2 || count > 6) {
         return;
@@ -714,13 +754,21 @@
       turnPlayer.textContent = players.length ? players[currentPlayer].name : "Belum diatur";
     }
 
+    function formatTimer(totalSeconds) {
+      if (totalSeconds < 60) return String(totalSeconds);
+
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      return `${minutes}:${String(seconds).padStart(2, "0")}`;
+    }
+
     function showPunishmentPopup(position) {
       return new Promise(resolve => {
-        const data = punishmentData[position] || { title: `Hukuman Kotak ${position}`, image: "hukuman.png" };
+        const data = punishmentData[position] || { title: `Hukuman Kotak ${position}`, image: "no4.png" };
         punishmentImage.src = data.image;
         punishmentTitle.innerHTML = `${data.title}<br><small>Kotak ${position}</small>`;
         punishmentModal.classList.remove("timer-focus");
-        punishmentTimer.textContent = "15";
+        punishmentTimer.textContent = formatTimer(punishmentDurationSeconds);
         punishmentTimer.classList.remove("show");
         startPunishmentBtn.disabled = false;
         startPunishmentBtn.textContent = "Start";
@@ -732,11 +780,11 @@
     function startPunishmentTimer() {
       if (!popupCloseCallback) return;
 
-      let seconds = 35;
+      let seconds = punishmentDurationSeconds;
       punishmentModal.classList.add("timer-focus");
       startPunishmentBtn.disabled = true;
       startPunishmentBtn.textContent = "Berjalan...";
-      punishmentTimer.textContent = seconds;
+      punishmentTimer.textContent = formatTimer(seconds);
       punishmentTimer.classList.add("show");
 
       if (punishmentCountdownInterval) {
@@ -745,7 +793,7 @@
 
       punishmentCountdownInterval = setInterval(() => {
         seconds--;
-        punishmentTimer.textContent = seconds;
+        punishmentTimer.textContent = formatTimer(seconds);
 
         if (seconds <= 0) {
           clearInterval(punishmentCountdownInterval);
@@ -848,7 +896,7 @@
     rollBtn.addEventListener("click", rollDice);
 
     settingsModal.addEventListener("click", (e) => {
-      if (e.target === settingsModal) closeSettings();
+      if (e.target === settingsModal && gameStarted) closeSettings();
     });
 
     punishmentModal.addEventListener("click", (e) => {
@@ -863,6 +911,7 @@
     createBoard();
     updateTurnDisplay();
     rollBtn.disabled = true;
+    openSettings();
   </script>
 </body>
 </html>
