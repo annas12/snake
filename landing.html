@@ -2,95 +2,243 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ular Tangga Bercanda - Aplikasi Game Acara Interaktif</title>
-  <meta name="description" content="Aplikasi game Ular Tangga Bercanda untuk acara, kelas, gathering, komunitas, dan hiburan keluarga. Siap pakai lewat link." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ular Tangga Pasutri - Game Romantis untuk Pasangan</title>
+  <meta name="description" content="Akses game ular tangga romantis untuk pasangan suami istri. Bikin malam berdua lebih cair, hangat, seru, dan tidak monoton.">
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at 15% 8%,rgba(255,47,163,.32),transparent 30%),radial-gradient(circle at 85% 14%,rgba(41,246,255,.24),transparent 30%),linear-gradient(180deg,#210016,#5d073e 45%,#12000c);color:#fff7fd;overflow-x:hidden}.wrap{width:min(100%,1160px);margin:auto;padding:18px}.alert{width:fit-content;max-width:100%;margin:0 auto 18px;padding:10px 16px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(255,47,163,.2);box-shadow:0 0 18px rgba(255,47,163,.35);font-weight:900;text-align:center}.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:center;min-height:630px;padding:24px 0}.badge{display:inline-flex;padding:9px 14px;border-radius:999px;background:rgba(41,246,255,.14);border:1px solid rgba(41,246,255,.5);box-shadow:0 0 18px rgba(41,246,255,.22);font-size:13px;font-weight:900;letter-spacing:.4px;text-transform:uppercase;margin-bottom:18px}h1{font-size:clamp(39px,7vw,78px);line-height:.9;text-transform:uppercase;letter-spacing:-2px;margin-bottom:18px}.neon{display:block;color:transparent;background:linear-gradient(90deg,#fff,#ffd7ec,#ff2fa3,#29f6ff,#fff);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;animation:run 3s linear infinite;text-shadow:0 0 8px rgba(255,255,255,.45),0 0 22px rgba(255,47,163,.85),0 0 42px rgba(41,246,255,.35)}@keyframes run{to{background-position:300% 50%}}.lead{font-size:clamp(18px,2.4vw,25px);line-height:1.35;font-weight:900;color:#ffe8f5;margin-bottom:15px}.lead strong{color:#ffe875}.sub{font-size:16px;line-height:1.65;color:#ffd2e8;max-width:670px;margin-bottom:24px}.cta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:15px 22px;border-radius:16px;border:2px solid rgba(255,255,255,.65);font-weight:950;text-transform:uppercase;text-align:center;cursor:pointer;text-decoration:none;color:white}.primary{background:linear-gradient(90deg,#ff2fa3,#ff007f,#9b5cff,#29f6ff,#ff2fa3);background-size:300% 100%;animation:run 3.2s linear infinite;box-shadow:0 0 16px rgba(255,47,163,.72),0 0 42px rgba(41,246,255,.22)}.secondary{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.25)}.note{font-size:13px;line-height:1.5;color:#ffd7ec;font-weight:800}.mock-card{position:relative;border-radius:34px;padding:18px;background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.06));border:1px solid rgba(255,255,255,.18);box-shadow:0 0 24px rgba(255,47,163,.3),0 28px 90px rgba(0,0,0,.35);overflow:hidden}.mock-card:before{content:"";position:absolute;inset:-80px;background:conic-gradient(transparent,rgba(41,246,255,.28),transparent,rgba(255,47,163,.36),transparent);animation:spin 7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.mock{position:relative;z-index:1;border-radius:24px;background:#fff3fa;padding:14px;color:#5e003d;box-shadow:inset 0 0 0 4px rgba(255,47,163,.65)}.mock-title{text-align:center;font-size:26px;font-weight:950;line-height:.95;margin:8px 0 14px;color:#ff2fa3;text-shadow:0 0 4px #fff,0 0 12px rgba(255,47,163,.7)}.board{aspect-ratio:1/1;border-radius:22px;background:linear-gradient(45deg,rgba(255,47,163,.18) 25%,transparent 25%),linear-gradient(-45deg,rgba(41,246,255,.18) 25%,transparent 25%),linear-gradient(135deg,#ffd7ec,#fff,#ffe875);background-size:42px 42px;border:4px solid #ff2fa3;position:relative;display:grid;grid-template-columns:repeat(5,1fr);overflow:hidden}.board span{border:1px solid rgba(122,11,79,.18);display:grid;place-items:center;font-size:18px;font-weight:950;color:rgba(122,11,79,.6)}.line{position:absolute;height:11px;border-radius:999px;transform-origin:left center;filter:drop-shadow(0 0 8px rgba(255,47,163,.6))}.snake{width:240px;background:linear-gradient(90deg,#ff007f,#ff82c4);left:38px;top:80px;transform:rotate(34deg)}.ladder{width:260px;background:linear-gradient(90deg,#29f6ff,#9b5cff);left:65px;bottom:96px;transform:rotate(-41deg)}.dice{position:absolute;right:20px;bottom:20px;width:78px;height:78px;border-radius:20px;background:white;color:#ff007f;display:grid;place-items:center;font-size:44px;font-weight:950;border:4px solid #29f6ff;box-shadow:0 0 14px rgba(41,246,255,.75),0 0 24px rgba(255,47,163,.55);animation:float 2.2s ease-in-out infinite}@keyframes float{50%{transform:translateY(-10px) rotate(6deg)}}section{padding:42px 0}.title{text-align:center;font-size:clamp(30px,5vw,48px);line-height:1;text-transform:uppercase;letter-spacing:-1px;margin-bottom:13px}.subtitle{text-align:center;color:#ffd7ec;line-height:1.6;max-width:760px;margin:0 auto 28px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{padding:22px;border-radius:24px;background:rgba(255,244,251,.08);border:1px solid rgba(255,255,255,.16);box-shadow:0 0 20px rgba(255,47,163,.14);backdrop-filter:blur(8px)}.icon{font-size:36px;margin-bottom:12px}.card h3{font-size:21px;margin-bottom:9px}.card p{color:#ffd7ec;line-height:1.6}.features{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.feature{display:flex;gap:12px;padding:16px;border-radius:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);font-weight:850;line-height:1.5;color:#ffe8f5}.check{flex:0 0 30px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#ff2fa3,#29f6ff);font-weight:950}.offer{display:grid;grid-template-columns:1fr .88fr;gap:20px}.offer-box{padding:28px;border-radius:30px;background:radial-gradient(circle at 20% 0%,rgba(41,246,255,.18),transparent 30%),linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.06));border:2px solid rgba(255,47,163,.5);box-shadow:0 0 22px rgba(255,47,163,.32)}.offer-box h2{font-size:clamp(31px,5vw,54px);line-height:.95;text-transform:uppercase;margin-bottom:14px}.timer{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}.time{padding:12px 8px;border-radius:16px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.2);text-align:center}.time b{display:block;font-size:26px;color:#ffe875}.time span{font-size:11px;color:#ffd7ec;font-weight:900}.price-card{position:relative;overflow:hidden;padding:28px;border-radius:30px;background:linear-gradient(180deg,#fff3fa,#ffd3e9);color:#690045;border:3px solid #ff2fa3;box-shadow:0 0 24px rgba(255,47,163,.55),0 24px 80px rgba(0,0,0,.25)}.price-card:before{content:"PROMO LAUNCHING";position:absolute;right:-45px;top:26px;transform:rotate(35deg);background:#ffe875;color:#5b003d;font-weight:950;font-size:12px;padding:8px 48px}.old{text-decoration:line-through;color:#9d4c78;font-size:18px;font-weight:900;margin-bottom:5px}.price{font-size:clamp(42px,7vw,64px);font-weight:950;letter-spacing:-2px;color:#ff007f;line-height:1;margin-bottom:8px}.pay{font-weight:900;line-height:1.5;margin-bottom:18px}.bonus{display:grid;gap:10px;margin:16px 0 22px}.bonus div{background:rgba(255,255,255,.65);border:1px solid rgba(255,47,163,.25);border-radius:14px;padding:11px 12px;font-weight:900}.safe{margin-top:16px;padding:16px;border-radius:18px;background:rgba(41,246,255,.1);border:1px solid rgba(41,246,255,.25);font-weight:800;line-height:1.5}.faq{display:grid;gap:12px;max-width:900px;margin:auto}details{border-radius:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);padding:16px 18px}summary{cursor:pointer;font-weight:950;font-size:17px}details p{margin-top:10px;color:#ffd7ec;line-height:1.6}.sticky{position:fixed;z-index:50;left:50%;bottom:14px;transform:translateX(-50%);width:min(calc(100% - 24px),760px);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px 10px 16px;border-radius:999px;background:rgba(30,0,20,.86);border:1px solid rgba(255,255,255,.22);box-shadow:0 0 22px rgba(255,47,163,.45),0 12px 40px rgba(0,0,0,.35);backdrop-filter:blur(10px)}.sticky p{font-weight:900;line-height:1.2}.sticky span{display:block;font-size:12px;color:#ffd7ec;margin-top:2px}.sticky .btn{min-height:44px;padding:11px 16px;border-radius:999px;font-size:13px;white-space:nowrap}.footer{text-align:center;padding:36px 0 94px;color:#d9a8c4;font-size:13px;line-height:1.6}@media(max-width:850px){.hero,.offer{grid-template-columns:1fr;min-height:auto}.grid3,.features{grid-template-columns:1fr}.sticky{border-radius:24px;align-items:stretch;flex-direction:column;text-align:center}.sticky .btn{width:100%}}@media(max-width:440px){.wrap{padding:14px}.mock-card{padding:10px}.mock{padding:10px}.mock-title{font-size:22px}.timer{gap:7px}.time b{font-size:21px}}
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#170010;--pink:#ff2fa3;--hot:#ff007f;--cyan:#26f5ff;--purple:#9b5cff;
+      --cream:#fff6fb;--soft:#ffd7ec;--yellow:#ffe875;--dark:#3c0028;
+    }
+    body{
+      font-family:Arial,Helvetica,sans-serif;
+      color:var(--cream);
+      background:
+        radial-gradient(circle at 15% 8%,rgba(255,47,163,.35),transparent 28%),
+        radial-gradient(circle at 85% 15%,rgba(38,245,255,.20),transparent 27%),
+        radial-gradient(circle at 50% 95%,rgba(155,92,255,.22),transparent 36%),
+        linear-gradient(180deg,#240019 0%,#5b053c 48%,#12000d 100%);
+      min-height:100vh;overflow-x:hidden;
+    }
+    a{text-decoration:none;color:inherit}
+    .wrap{width:min(100%,1120px);margin:auto;padding:18px}
+    .alert{
+      width:fit-content;max-width:100%;margin:0 auto 18px;padding:10px 16px;border-radius:999px;
+      background:rgba(255,47,163,.18);border:1px solid rgba(255,255,255,.25);
+      box-shadow:0 0 22px rgba(255,47,163,.35);font-weight:900;text-align:center;font-size:14px
+    }
+    .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:center;min-height:650px;padding:20px 0}
+    .badge{
+      display:inline-flex;margin-bottom:18px;padding:10px 14px;border-radius:999px;
+      background:rgba(38,245,255,.12);border:1px solid rgba(38,245,255,.42);
+      color:#e9fdff;font-size:13px;font-weight:950;text-transform:uppercase;letter-spacing:.5px
+    }
+    h1{font-size:clamp(40px,7vw,78px);line-height:.9;letter-spacing:-2px;text-transform:uppercase;margin-bottom:18px}
+    .neon{
+      display:block;color:transparent;background:linear-gradient(90deg,#fff,var(--soft),var(--pink),var(--cyan),#fff);
+      background-size:300% 100%;-webkit-background-clip:text;background-clip:text;animation:run 3s linear infinite;
+      text-shadow:0 0 8px rgba(255,255,255,.45),0 0 20px rgba(255,47,163,.8),0 0 36px rgba(38,245,255,.28)
+    }
+    @keyframes run{to{background-position:300% 50%}}
+    .lead{font-size:clamp(18px,2.3vw,25px);line-height:1.35;font-weight:900;color:#ffe9f5;margin-bottom:14px}
+    .lead strong{color:var(--yellow)}
+    .sub{font-size:16px;line-height:1.7;color:#ffd2e8;max-width:660px;margin-bottom:24px}
+    .cta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:14px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:15px 22px;border-radius:16px;
+      border:2px solid rgba(255,255,255,.6);font-weight:950;text-transform:uppercase;text-align:center;transition:.2s
+    }
+    .primary{
+      background:linear-gradient(90deg,var(--pink),var(--hot),var(--purple),var(--cyan),var(--pink));
+      background-size:300% 100%;animation:run 3.2s linear infinite;color:#fff;
+      box-shadow:0 0 18px rgba(255,47,163,.7),0 0 44px rgba(38,245,255,.18)
+    }
+    .primary:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 0 26px rgba(255,47,163,.95),0 0 60px rgba(38,245,255,.28)}
+    .secondary{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.22)}
+    .micro{font-size:13px;color:#ffd2e8;line-height:1.5;font-weight:800}
+    .phone{
+      position:relative;border-radius:36px;padding:18px;background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.20);box-shadow:0 0 26px rgba(255,47,163,.32),0 30px 90px rgba(0,0,0,.35);overflow:hidden
+    }
+    .phone:before{content:"";position:absolute;inset:-90px;background:conic-gradient(transparent,rgba(38,245,255,.32),transparent,rgba(255,47,163,.40),transparent);animation:spin 7s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .screen{position:relative;z-index:1;background:#fff2fa;color:#6d174a;border-radius:26px;padding:16px;box-shadow:inset 0 0 0 4px rgba(255,47,163,.65)}
+    .screen-title{text-align:center;font-size:27px;line-height:.95;font-weight:950;color:var(--pink);text-shadow:0 0 12px rgba(255,47,163,.45);margin:8px 0 14px}
+    .board{aspect-ratio:1/1;border-radius:24px;border:4px solid var(--pink);overflow:hidden;display:grid;grid-template-columns:repeat(5,1fr);position:relative;background:linear-gradient(135deg,#ffd7ec,#fff,#ffe875)}
+    .board span{display:grid;place-items:center;border:1px solid rgba(122,11,79,.18);font-weight:950;color:rgba(122,11,79,.55);font-size:18px}
+    .dice{position:absolute;right:20px;bottom:20px;width:78px;height:78px;border-radius:20px;background:#fff;display:grid;place-items:center;font-size:44px;border:4px solid var(--cyan);box-shadow:0 0 16px rgba(38,245,255,.7),0 0 24px rgba(255,47,163,.5);animation:float 2.2s ease-in-out infinite}
+    @keyframes float{50%{transform:translateY(-10px) rotate(7deg)}}
+    section{padding:44px 0}.title{text-align:center;font-size:clamp(30px,5vw,50px);line-height:1;text-transform:uppercase;margin-bottom:12px}
+    .desc{text-align:center;max-width:760px;margin:0 auto 28px;color:#ffd2e8;line-height:1.65}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .card{padding:22px;border-radius:24px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);box-shadow:0 0 20px rgba(255,47,163,.12);backdrop-filter:blur(8px)}
+    .icon{font-size:36px;margin-bottom:12px}.card h3{font-size:21px;margin-bottom:9px}.card p{color:#ffd2e8;line-height:1.62;font-size:15px}
+    .features{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .feature{display:flex;gap:12px;padding:16px;border-radius:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);font-weight:850;color:#ffe9f5;line-height:1.5}
+    .check{flex:0 0 30px;width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--cyan));display:grid;place-items:center;color:#fff;font-weight:950}
+    .offer{display:grid;grid-template-columns:1fr .9fr;gap:20px;align-items:stretch}
+    .offerbox{padding:28px;border-radius:30px;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.06));border:2px solid rgba(255,47,163,.45);box-shadow:0 0 26px rgba(255,47,163,.25)}
+    .offerbox h2{font-size:clamp(32px,5vw,54px);line-height:.95;text-transform:uppercase;margin-bottom:14px}
+    .pricecard{padding:28px;border-radius:30px;background:linear-gradient(180deg,#fff5fb,#ffd1e8);color:#6d174a;border:3px solid var(--pink);box-shadow:0 0 26px rgba(255,47,163,.55),0 24px 80px rgba(0,0,0,.25);position:relative;overflow:hidden}
+    .pricecard:before{content:"AKSES MALAM INI";position:absolute;right:-48px;top:28px;transform:rotate(35deg);background:var(--yellow);color:#5b003d;font-weight:950;font-size:12px;padding:8px 52px}
+    .old{text-decoration:line-through;color:#9d4c78;font-weight:850;margin-bottom:5px;font-size:18px}
+    .price{font-size:clamp(42px,7vw,64px);font-weight:950;letter-spacing:-2px;line-height:1;color:var(--hot);margin-bottom:8px}
+    .note{font-weight:900;line-height:1.5;margin-bottom:16px}
+    .bonus{display:grid;gap:10px;margin:16px 0 22px}.bonus div{background:rgba(255,255,255,.65);border:1px solid rgba(255,47,163,.25);border-radius:14px;padding:11px 12px;font-weight:900}
+    .count{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}
+    .time{padding:12px 8px;border-radius:16px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.2);text-align:center}.time b{display:block;font-size:26px;color:var(--yellow)}.time span{font-size:11px;font-weight:900;color:#ffd2e8}
+    .safe{margin-top:16px;padding:15px;border-radius:18px;background:rgba(38,245,255,.10);border:1px solid rgba(38,245,255,.25);color:#eaffff;line-height:1.55;font-weight:800}
+    .faq{max-width:900px;margin:auto;display:grid;gap:12px}details{border-radius:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);padding:16px 18px}summary{cursor:pointer;font-weight:950;font-size:17px}details p{margin-top:10px;color:#ffd2e8;line-height:1.6}
+    .sticky{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:50;width:min(calc(100% - 24px),760px);display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 12px 10px 16px;border-radius:999px;background:rgba(30,0,20,.86);border:1px solid rgba(255,255,255,.22);box-shadow:0 0 22px rgba(255,47,163,.45);backdrop-filter:blur(10px)}
+    .sticky p{font-weight:950;line-height:1.2}.sticky span{display:block;font-size:12px;color:#ffd2e8;font-weight:700;margin-top:2px}.sticky .btn{min-height:44px;padding:11px 16px;border-radius:999px;font-size:13px;white-space:nowrap}
+    footer{padding:36px 0 94px;text-align:center;color:#d9a8c4;font-size:13px;line-height:1.6}
+    @media(max-width:850px){.hero,.offer{grid-template-columns:1fr;min-height:auto}.grid3,.features{grid-template-columns:1fr}.sticky{border-radius:24px;flex-direction:column;text-align:center}.sticky .btn{width:100%}}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="alert">🔥 Promo launching: bonus setup & file siap upload bisa kamu klaim hari ini</div>
+    <div class="alert">💞 Khusus pasutri dewasa: promo akses game romantis bisa dipakai malam ini</div>
 
     <header class="hero">
       <div>
-        <div class="badge">🎲 Aplikasi game acara interaktif</div>
-        <h1>Acara Sepi? <span class="neon">Bikin Meledak</span> Dalam 5 Menit</h1>
-        <p class="lead">Jualan, kelas, gathering, arisan, komunitas, sampai acara keluarga bisa langsung pecah dengan <strong>Ular Tangga Bercanda</strong>.</p>
-        <p class="sub">Bukan cuma papan ular tangga biasa. Ini aplikasi game digital dengan dadu, giliran pemain, kotak hukuman bergambar, mode landscape, efek neon, dan sistem login email dari Spreadsheet. Tinggal buka link, main, ketawa, rame. Tidak perlu install aplikasi ribet.</p>
-        <div class="cta"><a class="btn primary" href="#checkout">Saya Mau Checkout Sekarang</a><a class="btn secondary" href="#fitur">Lihat Fiturnya Dulu</a></div>
-        <p class="note">⚡ Cocok untuk MC, guru, EO kecil, konten kreator, komunitas, kelas online/offline, dan siapa pun yang ingin acara langsung hidup.</p>
+        <div class="badge">Game romantis untuk pasangan suami istri</div>
+        <h1>
+          Malam Berdua
+          <span class="neon">Jangan Itu-Itu Saja</span>
+        </h1>
+        <p class="lead">
+          Bikin hubungan terasa lebih cair, hangat, lucu, dan penuh kejutan kecil lewat <strong>Ular Tangga Pasutri</strong>.
+        </p>
+        <p class="sub">
+          Ini bukan jual source code. Ini adalah akses bermain game online untuk pasutri yang ingin quality time lebih seru. Lempar dadu, maju ke kotak, ambil tantangan romantis, lalu biarkan obrolan dan kedekatan mengalir lebih natural.
+        </p>
+        <div class="cta">
+          <a class="btn primary" href="#checkout">Ambil Akses Sekarang</a>
+          <a class="btn secondary" href="#cara-main">Lihat Cara Main</a>
+        </div>
+        <p class="micro">✨ Cocok untuk pasangan yang sudah menikah, LDR yang sedang bertemu, honeymoon kecil di rumah, atau pasangan yang ingin menyalakan lagi suasana tanpa canggung.</p>
       </div>
-      <div class="mock-card"><div class="mock"><div class="mock-title">ULAR TANGGA<br>BERCANDA</div><div class="board">
-        <span>25</span><span>24</span><span>23</span><span>22</span><span>21</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>15</span><span>14</span><span>13</span><span>12</span><span>11</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
-        <div class="line snake"></div><div class="line ladder"></div><div class="dice">🎲</div>
-      </div></div></div>
+
+      <div class="phone">
+        <div class="screen">
+          <div class="screen-title">ULAR TANGGA<br>PASUTRI</div>
+          <div class="board">
+            <span>25</span><span>24</span><span>23</span><span>22</span><span>21</span>
+            <span>16</span><span>17</span><span>18</span><span>19</span><span>20</span>
+            <span>15</span><span>14</span><span>13</span><span>12</span><span>11</span>
+            <span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+            <span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+            <div class="dice">🎲</div>
+          </div>
+        </div>
+      </div>
     </header>
 
     <section>
-      <h2 class="title">Masalahnya Bukan Acaranya</h2>
-      <p class="subtitle">Masalahnya, orang butuh pemantik. Begitu ada game yang gampang dimainkan, suasana langsung berubah.</p>
+      <h2 class="title">Kenapa Game Ini Bikin Penasaran?</h2>
+      <p class="desc">Karena kadang pasangan bukan kurang sayang. Cuma butuh pemantik kecil agar suasana jadi lebih santai, berani bercanda, dan kembali terasa dekat.</p>
       <div class="grid3">
-        <div class="card"><div class="icon">😐</div><h3>Acara mulai datar</h3><p>Peserta datang, duduk, diam. MC capek mancing respon, tapi suasana tetap dingin seperti kulkas warung.</p></div>
-        <div class="card"><div class="icon">📱</div><h3>Semua sibuk HP</h3><p>Kalau tidak ada aktivitas yang menarik, peserta kabur ke layar masing-masing. Acaramu lewat begitu saja.</p></div>
-        <div class="card"><div class="icon">🎯</div><h3>Butuh game cepat</h3><p>Tidak semua acara punya waktu untuk setup ribet. Kamu butuh game yang tinggal buka link lalu langsung main.</p></div>
+        <div class="card"><div class="icon">🫶</div><h3>Mencairkan canggung</h3><p>Game membantu pasangan mulai dari tawa kecil dulu. Dari situ obrolan hangat jadi lebih mudah terbuka.</p></div>
+        <div class="card"><div class="icon">🎲</div><h3>Ada kejutan</h3><p>Dadu membuat momen terasa spontan. Tidak kaku, tidak seperti jadwal, dan tidak membosankan.</p></div>
+        <div class="card"><div class="icon">🌙</div><h3>Bisa main malam ini</h3><p>Tanpa install aplikasi. Setelah punya akses, cukup buka link, login email, lalu mulai main berdua.</p></div>
       </div>
     </section>
 
-    <section id="fitur">
-      <h2 class="title">Yang Kamu Dapat</h2>
-      <p class="subtitle">Satu paket aplikasi game digital yang bisa kamu pakai, jual ulang sebagai jasa acara, atau jadikan bonus produk digital.</p>
+    <section id="cara-main">
+      <h2 class="title">Cara Mainnya Simpel</h2>
+      <p class="desc">Tidak perlu aturan panjang. Fokusnya adalah momen berdua, bukan ribet memahami sistem.</p>
       <div class="features">
-        <div class="feature"><div class="check">✓</div><div>Papan ular tangga digital 1 sampai 100 dengan desain fun dan mobile friendly.</div></div>
-        <div class="feature"><div class="check">✓</div><div>Dadu otomatis, giliran pemain, dan token warna-warni.</div></div>
-        <div class="feature"><div class="check">✓</div><div>Kotak hukuman bergambar, tanpa teks mengganggu, cocok untuk challenge acara.</div></div>
-        <div class="feature"><div class="check">✓</div><div>Mode landscape rapi: papan besar di kiri, kontrol di kanan.</div></div>
-        <div class="feature"><div class="check">✓</div><div>Efek neon pada judul, tombol, papan, popup, dan dadu.</div></div>
-        <div class="feature"><div class="check">✓</div><div>Pengaturan jumlah pemain dan durasi hukuman.</div></div>
-        <div class="feature"><div class="check">✓</div><div>Sistem login email via Google Spreadsheet.</div></div>
-        <div class="feature"><div class="check">✓</div><div>1 email hanya 1 sesi aktif, session expired 1 jam, ada logout manual.</div></div>
+        <div class="feature"><div class="check">1</div><div>Beli akses, lalu masuk memakai email yang terdaftar.</div></div>
+        <div class="feature"><div class="check">2</div><div>Pilih jumlah pemain, biasanya 2 orang untuk pasutri.</div></div>
+        <div class="feature"><div class="check">3</div><div>Lempar dadu, maju ke kotak, dan ikuti tantangan romantis yang muncul.</div></div>
+        <div class="feature"><div class="check">4</div><div>Kalau kena kotak hukuman, jalankan challenge ringan sesuai gambar atau instruksi yang kamu siapkan.</div></div>
+        <div class="feature"><div class="check">✓</div><div>Bisa dimainkan lewat HP, laptop, atau layar TV.</div></div>
+        <div class="feature"><div class="check">✓</div><div>Refresh tidak perlu login ulang selama sesi masih aktif.</div></div>
       </div>
     </section>
 
     <section>
-      <h2 class="title">Beli Sekali, Pakai Berkali-kali</h2>
-      <p class="subtitle">Kamu tidak sedang beli “file HTML”. Kamu sedang beli alat pembuat suasana. Sekali punya, tinggal pakai di acara berikutnya.</p>
-      <div class="grid3">
-        <div class="card"><div class="icon">🎤</div><h3>Untuk MC & EO</h3><p>Jadi pemecah suasana cepat saat acara mulai turun energi. Tinggal buka link, pilih pemain, lempar dadu.</p></div>
-        <div class="card"><div class="icon">🏫</div><h3>Untuk guru & trainer</h3><p>Bikin kelas lebih aktif. Challenge bisa disesuaikan jadi edukasi, hafalan, ice breaking, atau kuis ringan.</p></div>
-        <div class="card"><div class="icon">💰</div><h3>Untuk jualan digital</h3><p>Bisa dijadikan produk digital, bonus komunitas, atau paket game custom untuk klien.</p></div>
+      <h2 class="title">Yang Didapat Pembeli</h2>
+      <p class="desc">Yang kamu jual ke pelanggan adalah akses bermain, bukan file mentah aplikasi.</p>
+      <div class="features">
+        <div class="feature"><div class="check">✓</div><div>Akses game Ular Tangga Pasutri via link online.</div></div>
+        <div class="feature"><div class="check">✓</div><div>Desain neon romantis yang enak dilihat saat malam.</div></div>
+        <div class="feature"><div class="check">✓</div><div>Dadu otomatis, giliran pemain, popup challenge, dan timer.</div></div>
+        <div class="feature"><div class="check">✓</div><div>Login email untuk mengaktifkan akses pembeli.</div></div>
+        <div class="feature"><div class="check">✓</div><div>1 email hanya 1 sesi aktif, jadi akses tidak mudah dibagikan ramai-ramai.</div></div>
+        <div class="feature"><div class="check">✓</div><div>Cocok untuk quality time, anniversary, honeymoon di rumah, atau hadiah kecil untuk pasangan.</div></div>
       </div>
     </section>
 
     <section id="checkout">
       <div class="offer">
-        <div class="offer-box"><h2>Ambil Sekarang Sebelum Acaramu Jadi Sepi Lagi</h2><p class="sub">Aplikasi ini dibuat untuk orang yang tidak mau acara terasa kaku. Saat peserta mulai ketawa, suasana naik. Saat suasana naik, acara lebih mudah diingat.</p>
-          <div class="timer"><div class="time"><b id="h">00</b><span>JAM</span></div><div class="time"><b id="m">00</b><span>MENIT</span></div><div class="time"><b id="s">00</b><span>DETIK</span></div><div class="time"><b>🔥</b><span>PROMO</span></div></div>
-          <div class="safe"><strong>Catatan aman:</strong> harga, bonus, batas promo, dan link checkout bisa kamu edit sesuai penawaran asli agar tidak terasa palsu.</div>
+        <div class="offerbox">
+          <h2>Jangan Tunggu Hubungan Terasa Hambar Dulu</h2>
+          <p class="sub">
+            Banyak pasangan sebenarnya ingin lebih dekat, tapi bingung mulai dari mana. Game ini jadi jembatan kecil: ringan, seru, dan bikin suasana lebih hidup tanpa harus banyak mikir.
+          </p>
+          <div class="count">
+            <div class="time"><b id="h">00</b><span>JAM</span></div>
+            <div class="time"><b id="m">00</b><span>MENIT</span></div>
+            <div class="time"><b id="s">00</b><span>DETIK</span></div>
+            <div class="time"><b>💞</b><span>PROMO</span></div>
+          </div>
+          <div class="safe">
+            <strong>Catatan:</strong> landing page ini memakai gaya promosi impulsif, tapi tetap sebaiknya kamu sesuaikan dengan penawaran asli: durasi akses, harga, bonus, dan batas promo.
+          </div>
         </div>
-        <div class="price-card"><p class="old">Harga normal: Rp299.000</p><div class="price">Rp97.000</div><p class="pay">Promo launching untuk pembeli awal. Dapat file aplikasi + panduan setup + bonus template Spreadsheet login.</p>
-          <div class="bonus"><div>✅ File aplikasi siap upload</div><div>✅ Landing page jualan ini</div><div>✅ Sistem login Spreadsheet</div><div>✅ Panduan Cloudflare Pages</div><div>✅ Bonus revisi teks landing page</div></div>
-          <a class="btn primary" style="width:100%" href="https://wa.me/6281234567890?text=Halo%2C%20saya%20mau%20checkout%20aplikasi%20Ular%20Tangga%20Bercanda">Checkout via WhatsApp</a>
-          <p class="note" style="color:#8a1355;margin-top:13px;text-align:center">Ganti nomor WhatsApp di kode HTML sebelum dipakai.</p>
+
+        <div class="pricecard">
+          <p class="old">Harga normal: Rp99.000</p>
+          <div class="price">Rp29.000</div>
+          <p class="note">Akses game romantis untuk pasutri. Setelah checkout, email pembeli bisa kamu aktifkan di Spreadsheet.</p>
+          <div class="bonus">
+            <div>✅ Akses game online</div>
+            <div>✅ Bisa dimainkan berdua lewat HP</div>
+            <div>✅ Login email khusus pembeli</div>
+            <div>✅ Cocok untuk malam quality time</div>
+            <div>✅ Tanpa install aplikasi</div>
+          </div>
+          <a class="btn primary" style="width:100%" href="https://wa.me/6281234567890?text=Halo%2C%20saya%20mau%20beli%20akses%20Ular%20Tangga%20Pasutri">
+            Checkout Akses Game
+          </a>
+          <p class="micro" style="color:#8a1355;margin-top:13px;text-align:center">Ganti nomor WhatsApp dan harga sesuai produk kamu.</p>
         </div>
       </div>
     </section>
 
     <section>
-      <h2 class="title">FAQ</h2><p class="subtitle">Jawaban cepat sebelum checkout.</p>
+      <h2 class="title">FAQ</h2>
+      <p class="desc">Pertanyaan yang biasanya muncul sebelum checkout.</p>
       <div class="faq">
-        <details open><summary>Apakah harus install aplikasi?</summary><p>Tidak. Game bisa dibuka lewat link website. Cocok untuk HP, laptop, atau ditampilkan di layar besar.</p></details>
-        <details><summary>Apakah bisa dipakai untuk banyak acara?</summary><p>Bisa. Setelah kamu punya filenya, kamu bisa pakai berkali-kali untuk acara berbeda.</p></details>
-        <details><summary>Apakah bisa atur siapa yang boleh masuk?</summary><p>Bisa. Versi ini mendukung login email dari Google Spreadsheet, termasuk 1 email hanya 1 sesi aktif.</p></details>
-        <details><summary>Apakah bisa ganti gambar hukuman?</summary><p>Bisa. Gambar hukuman memakai file PNG, jadi kamu bisa mengganti gambar sesuai tema acara.</p></details>
+        <details open><summary>Ini untuk siapa?</summary><p>Untuk pasangan suami istri dewasa yang ingin quality time lebih seru, romantis, dan tidak monoton.</p></details>
+        <details><summary>Apakah ini menjual source code?</summary><p>Tidak. Yang dijual adalah akses bermain game online. Pembeli cukup login dan main.</p></details>
+        <details><summary>Apakah harus install aplikasi?</summary><p>Tidak. Game dibuka lewat link di browser HP atau laptop.</p></details>
+        <details><summary>Apakah akses bisa dibagikan?</summary><p>Sistem bisa dibuat 1 email hanya 1 sesi aktif. Kalau login di perangkat baru, sesi lama otomatis keluar.</p></details>
+        <details><summary>Apakah kontennya vulgar?</summary><p>Kamu bisa mengatur sendiri gaya tantangannya. Landing page ini dibuat romantis dan playful, bukan vulgar.</p></details>
       </div>
     </section>
-    <footer class="footer">© 2026 Ular Tangga Bercanda. Edit harga, bonus, dan klaim sesuai penawaran asli.</footer>
+
+    <footer>
+      <p>© 2026 Ular Tangga Pasutri. Khusus pasangan dewasa. Edit harga, durasi akses, bonus, dan klaim promo sesuai penawaran asli.</p>
+    </footer>
   </div>
-  <div class="sticky"><p>Mau acara langsung rame?<span>Ambil aplikasinya sekarang, edit, upload, lalu jual atau pakai sendiri.</span></p><a class="btn primary" href="#checkout">Checkout Sekarang</a></div>
+
+  <div class="sticky">
+    <p>Siap bikin malam berdua lebih seru?<span>Aktifkan akses game untuk pembeli, lalu mereka bisa langsung main.</span></p>
+    <a class="btn primary" href="#checkout">Checkout Sekarang</a>
+  </div>
+
   <script>
-    function tick(){const n=new Date(),d=new Date();d.setHours(24,0,0,0);const x=Math.max(0,d-n),h=Math.floor(x/36e5),m=Math.floor(x/6e4%60),s=Math.floor(x/1e3%60);document.getElementById('h').textContent=String(h).padStart(2,'0');document.getElementById('m').textContent=String(m).padStart(2,'0');document.getElementById('s').textContent=String(s).padStart(2,'0')}tick();setInterval(tick,1000)
+    function tick(){
+      const now=new Date(), end=new Date(); end.setHours(24,0,0,0);
+      const d=Math.max(0,end-now), h=Math.floor(d/36e5), m=Math.floor(d/6e4%60), s=Math.floor(d/1e3%60);
+      document.getElementById("h").textContent=String(h).padStart(2,"0");
+      document.getElementById("m").textContent=String(m).padStart(2,"0");
+      document.getElementById("s").textContent=String(s).padStart(2,"0");
+    }
+    tick(); setInterval(tick,1000);
   </script>
 </body>
 </html>
