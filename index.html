@@ -1450,38 +1450,53 @@
       67: 95
     };
 
-    const punishmentCells = [4, 7, 10, 12, 16, 19, 24, 28, 30, 33, 36, 39, 43, 46, 50, 54, 56, 60, 63, 66, 69, 73, 76, 79, 82, 85, 89, 91, 94, 97];
+    const punishmentCells = [2, 4, 7, 10, 12, 16, 18, 19, 20, 24, 26, 28, 30, 32, 33, 36, 39, 43, 44, 46, 47, 50, 51, 54, 56, 58, 60, 63, 64, 66, 68, 69, 72, 73, 76, 79, 80, 82, 85, 89, 91, 94, 97, 99, 100];
     const punishmentData = {
+      2: { title: "", image: "no2.png" },
       4: { title: "", image: "no4.png" },
       7: { title: "", image: "no7.png" },
       10: { title: "", image: "no10.png" },
       12: { title: "", image: "no12.png" },
       16: { title: "", image: "no16.png" },
+      18: { title: "", image: "no18.png" },
       19: { title: "", image: "no19.png" },
+      20: { title: "", image: "no20.png" },
       24: { title: "", image: "no24.png" },
+      26: { title: "", image: "no26.png" },
       28: { title: "", image: "no28.png" },
       30: { title: "", image: "no30.png" },
+      32: { title: "", image: "no32.png" },
       33: { title: "", image: "no33.png" },
       36: { title: "", image: "no36.png" },
       39: { title: "", image: "no39.png" },
       43: { title: "", image: "no43.png" },
+      44: { title: "", image: "no44.png" },
       46: { title: "", image: "no46.png" },
+      47: { title: "", image: "no47.png" },
       50: { title: "", image: "no50.png" },
+      51: { title: "", image: "no51.png" },
       54: { title: "", image: "no54.png" },
       56: { title: "", image: "no56.png" },
+      58: { title: "", image: "no58.png" },
       60: { title: "", image: "no60.png" },
       63: { title: "", image: "no63.png" },
+      64: { title: "", image: "no64.png" },
       66: { title: "", image: "no66.png" },
+      68: { title: "", image: "no68.png" },
       69: { title: "", image: "no69.png" },
+      72: { title: "", image: "no72.png" },
       73: { title: "", image: "no73.png" },
       76: { title: "", image: "no76.png" },
       79: { title: "", image: "no79.png" },
+      80: { title: "", image: "no80.png" },
       82: { title: "", image: "no82.png" },
       85: { title: "", image: "no85.png" },
       89: { title: "", image: "no89.png" },
       91: { title: "", image: "no91.png" },
       94: { title: "", image: "no94.png" },
-      97: { title: "", image: "no97.png" }
+      97: { title: "", image: "no97.png" },
+      99: { title: "", image: "no99.png" },
+      100: { title: "", image: "no100.png" }
     };
     const playerColors = ["#e53935", "#1e88e5", "#43a047", "#8e24aa", "#fb8c00", "#00897b"];
 
@@ -1653,7 +1668,11 @@
 
     function showPunishmentPopup(position) {
       return new Promise(resolve => {
-        const data = punishmentData[position] || { title: `Hukuman Kotak ${position}`, image: "no4.png" };
+        const data = punishmentData[position] || { title: "", image: `no${position}.png` };
+        punishmentImage.onerror = () => {
+          punishmentImage.onerror = null;
+          punishmentImage.src = "no4.png";
+        };
         punishmentImage.src = data.image;
         punishmentTitle.innerHTML = "";
         punishmentModal.classList.remove("timer-focus");
