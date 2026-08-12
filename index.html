@@ -217,9 +217,7 @@
 
         showMessage("Login berhasil. Mengalihkan ke game...", "success");
 
-        setTimeout(function() {
-          window.location.href = GAME_URL;
-        }, 700);
+        window.location.replace(GAME_URL);
       } else {
         showMessage(result.message || "Email belum terdaftar.", "error");
         button.disabled = false;
