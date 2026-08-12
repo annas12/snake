@@ -147,80 +147,86 @@
     </p>
   </div>
 
-  <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxB2jiaPZSU3jxmYbFbA4zlG8aWmyOkbIvPeGjcvwUgh8k9sJZqPW1D6Wtfh0fKqQnC/exec";
-    const GAME_URL = "./game.html";
+<script>
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyctsbTC-Q7Scag7Ur29KRjjnM_wQ9G3K3bvJfrBZKIg_FzWuhlqyET8k_rran8kcU/exec";
+  const GAME_URL = "./game.html";
 
-    const form = document.getElementById("loginForm");
-    const emailInput = document.getElementById("emailInput");
-    const button = document.getElementById("loginButton");
-    const message = document.getElementById("loginMessage");
+  const form = document.getElementById("loginForm");
+  const emailInput = document.getElementById("emailInput");
+  const button = document.getElementById("loginButton");
+  const message = document.getElementById("loginMessage");
 
-    function showMessage(text, type) {
-      message.textContent = text;
-      message.className = "login-message " + type;
-    }
+  function showMessage(text, type) {
+    message.textContent = text;
+    message.className = "login-message " + type;
+  }
 
-    function jsonpLogin(email, callback) {
-      const callbackName = "loginCallback_" + Date.now();
+  function jsonpRequest(params, callback) {
+    const callbackName = "callback_" + Date.now() + "_" + Math.floor(Math.random() * 99999);
 
-      window[callbackName] = function(data) {
-        callback(data);
-        delete window[callbackName];
-        script.remove();
-      };
+    window[callbackName] = function(data) {
+      callback(data);
+      delete window[callbackName];
+      script.remove();
+    };
 
-      const script = document.createElement("script");
-
-      script.src =
-        WEB_APP_URL +
-        "?email=" + encodeURIComponent(email) +
-        "&callback=" + callbackName;
-
-      script.onerror = function() {
-        callback({
-          ok: false,
-          message: "Gagal terhubung ke server login."
-        });
-
-        delete window[callbackName];
-        script.remove();
-      };
-
-      document.body.appendChild(script);
-    }
-
-    form.addEventListener("submit", function(e) {
-      e.preventDefault();
-
-      const email = emailInput.value.trim().toLowerCase();
-
-      if (!email || !email.includes("@")) {
-        showMessage("Masukkan email yang benar.", "error");
-        return;
-      }
-
-      button.disabled = true;
-      button.textContent = "Mengecek...";
-      showMessage("Sebentar, email sedang dicek...", "success");
-
-      jsonpLogin(email, function(result) {
-        if (result.ok) {
-          localStorage.setItem("game_pasutri_email", result.email);
-          localStorage.setItem("game_pasutri_login_at", Date.now());
-
-          showMessage("Login berhasil. Mengalihkan ke game...", "success");
-
-          setTimeout(function() {
-            window.location.href = GAME_URL;
-          }, 700);
-        } else {
-          showMessage(result.message || "Email belum terdaftar.", "error");
-          button.disabled = false;
-          button.textContent = "Masuk ke Game";
-        }
-      });
+    const query = new URLSearchParams({
+      ...params,
+      callback: callbackName,
+      t: Date.now()
     });
-  </script>
+
+    const script = document.createElement("script");
+    script.src = WEB_APP_URL + "?" + query.toString();
+
+    script.onerror = function() {
+      callback({
+        ok: false,
+        message: "Gagal terhubung ke server login."
+      });
+
+      delete window[callbackName];
+      script.remove();
+    };
+
+    document.body.appendChild(script);
+  }
+
+  form.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const email = emailInput.value.trim().toLowerCase();
+
+    if (!email || !email.includes("@")) {
+      showMessage("Masukkan email yang benar.", "error");
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Mengecek...";
+    showMessage("Sebentar, email sedang dicek...", "success");
+
+    jsonpRequest({
+      action: "login",
+      email: email
+    }, function(result) {
+      if (result.ok) {
+        localStorage.setItem("game_pasutri_email", result.email);
+        localStorage.setItem("game_pasutri_session_id", result.session_id);
+        localStorage.setItem("game_pasutri_login_at", Date.now());
+
+        showMessage("Login berhasil. Mengalihkan ke game...", "success");
+
+        setTimeout(function() {
+          window.location.href = GAME_URL;
+        }, 700);
+      } else {
+        showMessage(result.message || "Email belum terdaftar.", "error");
+        button.disabled = false;
+        button.textContent = "Masuk ke Game";
+      }
+    });
+  });
+</script>
 </body>
 </html>
