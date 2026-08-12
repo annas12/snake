@@ -216,9 +216,7 @@
         if (result.ok) {
           showMessage("Berhasil. Menuju halaman login...", "success");
 
-          setTimeout(function() {
-            window.location.href = LOGIN_URL;
-          }, 900);
+          window.location.replace(LOGIN_URL);
         } else {
           showMessage(result.message || "Gagal mengkonfirmasi email.", "error");
           button.disabled = false;
