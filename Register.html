@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Tambah Email</title>
+  <title>Konfirmasi Email</title>
 
   <style>
     * {
@@ -119,15 +119,15 @@
 
 <body>
   <div class="admin-box">
-    <h1 class="admin-title">Tambah Email</h1>
+    <h1 class="admin-title">Konfirmasi Email</h1>
 
     <p class="admin-subtitle">
-      Masukkan email pembeli. Setelah berhasil, halaman akan langsung menuju menu login.
+      Masukkan email untuk Konfirmasi pembelian, CUKUP 1X SAJA. Setelah berhasil, halaman akan langsung menuju menu login.
     </p>
 
     <form id="adminForm">
       <label class="admin-label" for="emailInput">
-        Email Pembeli
+        Email 
       </label>
 
       <input
@@ -139,14 +139,14 @@
       >
 
       <button class="admin-button" type="submit" id="adminButton">
-        Submit Email
+       Konfirmasi Email
       </button>
 
       <div class="admin-message" id="adminMessage"></div>
     </form>
 
     <p class="admin-note">
-      Email yang berhasil ditambahkan otomatis bisa login ke game.
+      Email yang berhasil dikonfirmasi otomatis bisa login ke game.
     </p>
   </div>
 
@@ -207,7 +207,7 @@
 
       button.disabled = true;
       button.textContent = "Menyimpan...";
-      showMessage("Sebentar, email sedang ditambahkan...", "success");
+      showMessage("Sebentar, email sedang dikonfirmasi...", "success");
 
       jsonpRequest({
         action: "add_email",
@@ -220,7 +220,7 @@
             window.location.href = LOGIN_URL;
           }, 900);
         } else {
-          showMessage(result.message || "Gagal menambahkan email.", "error");
+          showMessage(result.message || "Gagal mengkonfirmasi email.", "error");
           button.disabled = false;
           button.textContent = "Submit Email";
         }
