@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Tambah Email</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      background: #000000;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #ffffff;
+    }
+
+    .admin-box {
+      width: 100%;
+      max-width: 430px;
+      padding: 30px 24px;
+      border-radius: 22px;
+      background: #0b0b0b;
+      border: 1px solid #ff2f68;
+      text-align: center;
+    }
+
+    .admin-title {
+      margin: 0 0 10px;
+      font-size: 30px;
+      line-height: 1;
+      font-weight: 950;
+      color: #ff2f68;
+      text-transform: uppercase;
+    }
+
+    .admin-subtitle {
+      margin: 0 0 24px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #ffffff;
+    }
+
+    .admin-label {
+      display: block;
+      margin: 0 0 8px;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .admin-input {
+      width: 100%;
+      height: 52px;
+      padding: 0 15px;
+      border-radius: 14px;
+      border: 1px solid #ff2f68;
+      background: #000000;
+      color: #ffffff;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .admin-input::placeholder {
+      color: #888888;
+    }
+
+    .admin-button {
+      width: 100%;
+      height: 54px;
+      margin-top: 18px;
+      border: none;
+      border-radius: 14px;
+      background: #ff004c;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 950;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .admin-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .admin-message {
+      min-height: 22px;
+      margin-top: 16px;
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.5;
+    }
+
+    .admin-message.success {
+      color: #ffffff;
+    }
+
+    .admin-message.error {
+      color: #ff8aa8;
+    }
+
+    .admin-note {
+      margin: 18px 0 0;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #bbbbbb;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="admin-box">
+    <h1 class="admin-title">Tambah Email</h1>
+
+    <p class="admin-subtitle">
+      Masukkan email pembeli. Setelah berhasil, halaman akan langsung menuju menu login.
+    </p>
+
+    <form id="adminForm">
+      <label class="admin-label" for="emailInput">
+        Email Pembeli
+      </label>
+
+      <input
+        class="admin-input"
+        type="email"
+        id="emailInput"
+        placeholder="pembeli@email.com"
+        required
+      >
+
+      <button class="admin-button" type="submit" id="adminButton">
+        Submit Email
+      </button>
+
+      <div class="admin-message" id="adminMessage"></div>
+    </form>
+
+    <p class="admin-note">
+      Email yang berhasil ditambahkan otomatis bisa login ke game.
+    </p>
+  </div>
+
+  <script>
+    const WEB_APP_URL = "ISI_URL_WEB_APP_APPS_SCRIPT";
+    const LOGIN_URL = "./";
+
+    const form = document.getElementById("adminForm");
+    const emailInput = document.getElementById("emailInput");
+    const button = document.getElementById("adminButton");
+    const message = document.getElementById("adminMessage");
+
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = "admin-message " + type;
+    }
+
+    function jsonpRequest(params, callback) {
+      const callbackName = "adminCallback_" + Date.now() + "_" + Math.floor(Math.random() * 99999);
+
+      window[callbackName] = function(data) {
+        callback(data);
+        delete window[callbackName];
+        script.remove();
+      };
+
+      const query = new URLSearchParams({
+        ...params,
+        callback: callbackName,
+        t: Date.now()
+      });
+
+      const script = document.createElement("script");
+      script.src = WEB_APP_URL + "?" + query.toString();
+
+      script.onerror = function() {
+        callback({
+          ok: false,
+          message: "Gagal terhubung ke server."
+        });
+
+        delete window[callbackName];
+        script.remove();
+      };
+
+      document.body.appendChild(script);
+    }
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const email = emailInput.value.trim().toLowerCase();
+
+      if (!email || !email.includes("@")) {
+        showMessage("Masukkan email yang benar.", "error");
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Menyimpan...";
+      showMessage("Sebentar, email sedang ditambahkan...", "success");
+
+      jsonpRequest({
+        action: "add_email",
+        email: email
+      }, function(result) {
+        if (result.ok) {
+          showMessage("Berhasil. Menuju halaman login...", "success");
+
+          setTimeout(function() {
+            window.location.href = LOGIN_URL;
+          }, 900);
+        } else {
+          showMessage(result.message || "Gagal menambahkan email.", "error");
+          button.disabled = false;
+          button.textContent = "Submit Email";
+        }
+      });
+    });
+  </script>
+</body>
+</html>
