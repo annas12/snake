@@ -1,1825 +1,226 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ular Tangga Dewasa</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Game Pasutri</title>
+
   <style>
-    * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
       min-height: 100vh;
-      background: linear-gradient(180deg, #ffd9ec 0%, #ffc1de 45%, #ffb0d3 100%);
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 12px;
-      color: #6d174a;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      background: #000000;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #ffffff;
     }
 
-    .app {
-      width: min(100%, 430px);
-      position: relative;
-    }
-
-    .topbar {
-      position: relative;
-      padding-top: 8px;
-      margin-bottom: 10px;
-    }
-
-    .title {
+    .login-box {
+      width: 100%;
+      max-width: 420px;
+      padding: 30px 24px;
+      border-radius: 22px;
+      background: #0b0b0b;
+      border: 1px solid #ff2f68;
       text-align: center;
-      font-size: 26px;
-      font-weight: 900;
+    }
+
+    .login-title {
+      margin: 0 0 10px;
+      font-size: 34px;
       line-height: 1;
-      letter-spacing: 0.8px;
-      margin: 8px 54px 8px;
+      font-weight: 950;
+      color: #ff2f68;
       text-transform: uppercase;
-      color: #8a1355;
-      text-shadow: 0 2px 0 rgba(255,255,255,0.45);
     }
 
-    .settings-btn {
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: 48px;
-      height: 48px;
-      border: 2px solid #b42873;
-      background: linear-gradient(180deg, #ffe1ef 0%, #ffbfdc 100%);
-      border-radius: 50%;
-      font-size: 24px;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      box-shadow: 0 6px 14px rgba(180,40,115,0.18);
+    .login-subtitle {
+      margin: 0 0 24px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #ffffff;
     }
 
-    .board-frame {
-      border: 4px solid #b42873;
-      background: #ffcae2;
-      padding: 6px;
-      aspect-ratio: 1 / 1;
-      position: relative;
-      overflow: hidden;
-      border-radius: 30px;
-      box-shadow: 0 14px 34px rgba(180,40,115,0.22);
-    }
-
-    .board {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      grid-template-rows: repeat(10, 1fr);
-
-      background-color: #fff7fb;
-      background-image: url("background.png");
-      background-size: 100% 100%;
-      background-position: center;
-      background-repeat: no-repeat;
-
-      border-radius: 22px;
-      overflow: hidden;
-    }
-
-    /* Kotak dibuat sebagai area klik/posisi saja, tidak menutupi gambar */
-    .cell {
-      position: relative;
-      border: 0.6px solid rgba(138, 19, 85, 0.20);
-      background: transparent;
-      padding: 0;
-      font-size: 0;
-      color: transparent;
-    }
-
-    /* Semua marker bawaan aplikasi disembunyikan karena sudah ada di gambar background */
-    .cell-mark,
-    .cell-mark-top,
-    .lines {
-      display: none !important;
-    }
-
-    .tokens {
-      position: absolute;
-      inset: 0;
-      z-index: 5;
-      pointer-events: none;
-    }
-
-    .token {
-      position: absolute;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      color: white;
-      display: grid;
-      place-items: center;
-      font-size: 12px;
-      font-weight: 900;
-      border: 3px solid white;
-      box-shadow: 0 3px 9px rgba(0,0,0,0.45);
-      transform: translate(-50%, -50%);
-      transition: left 0.34s ease, top 0.34s ease, transform 0.18s ease;
-      z-index: 10;
-    }
-
-    .token.step-pop {
-      transform: translate(-50%, -50%) scale(1.2);
-    }
-
-    .bottom-row {
-      margin-top: 14px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      align-items: stretch;
-    }
-
-    .info-box,
-    .dice-box {
-      border: 2px solid #c42f7d;
-      background: linear-gradient(180deg, #fff0f7 0%, #ffd8e9 100%);
-      min-height: 104px;
-      padding: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 22px;
-      box-shadow: 0 10px 22px rgba(196,47,125,0.16);
-    }
-
-    .turn-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-    }
-
-    .turn-icon {
-      font-size: 40px;
-      line-height: 1;
-    }
-
-    .turn-label {
-      font-size: 18px;
-      font-weight: 900;
-      margin-bottom: 6px;
-      color: #8a1355;
-    }
-
-    .turn-player {
-      font-size: 14px;
-      font-weight: 800;
-      color: #6d174a;
-    }
-
-    .dice-area {
-      width: 100%;
-      display: grid;
-      justify-items: center;
-      gap: 8px;
-    }
-
-    .dice {
-      width: 68px;
-      height: 68px;
-      border: 2px solid #b42873;
-      border-radius: 18px;
-      background: linear-gradient(180deg, #fff8fc 0%, #ffd9eb 100%);
-      display: grid;
-      place-items: center;
-      font-size: 38px;
-      font-weight: 900;
-      box-shadow: inset 0 -5px 0 rgba(180,40,115,0.12), 0 8px 16px rgba(180,40,115,0.12);
-      color: #8a1355;
-    }
-
-    .dice.rolling { animation: rollDice 0.12s linear infinite; }
-
-    @keyframes rollDice {
-      0% { transform: rotate(0deg) scale(1); }
-      50% { transform: rotate(15deg) scale(1.08); }
-      100% { transform: rotate(-15deg) scale(1); }
-    }
-
-    .roll-btn {
-      width: 100%;
-      border: 2px solid #b42873;
-      background: linear-gradient(180deg, #ff4fa0 0%, #e83e8c 100%);
-      color: #fff;
-      font-weight: 900;
-      padding: 10px 8px;
-      cursor: pointer;
-      border-radius: 14px;
-      text-transform: uppercase;
-      font-size: 13px;
-      box-shadow: 0 8px 18px rgba(232,62,140,0.28);
-    }
-
-    .roll-btn:disabled { opacity: 0.55; cursor: not-allowed; }
-
-    .status-box {
-      display: none;
-    }
-
-    .players-mini {
-      margin-top: 12px;
-      display: grid;
-      gap: 8px;
-    }
-
-    .player-mini {
-      border: 1.8px solid #d94c95;
-      background: linear-gradient(180deg, #fff2f8 0%, #ffe0ee 100%);
-      padding: 8px 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-      font-weight: 700;
-      border-radius: 14px;
-      color: #6d174a;
-    }
-
-    .player-mini.active {
-      background: linear-gradient(180deg, #ffcee5 0%, #ffb5d6 100%);
-      border-color: #b42873;
-      box-shadow: 0 6px 14px rgba(180,40,115,0.18);
-    }
-
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      z-index: 999;
-    }
-
-    .modal-overlay.show { display: flex; }
-
-    .modal-box {
-      width: min(92vw, 360px);
-      background: linear-gradient(180deg, #fff2f8 0%, #ffd8ea 100%);
-      border: 2px solid #b42873;
-      padding: 18px;
-      box-shadow: 0 18px 40px rgba(180,40,115,0.28);
-      animation: modalPop 0.25s ease;
-      border-radius: 22px;
-    }
-
-    @keyframes modalPop {
-      from { opacity: 0; transform: scale(0.9) translateY(8px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .modal-title {
-      font-size: 22px;
-      font-weight: 900;
-      text-transform: uppercase;
-      margin-bottom: 14px;
-      text-align: center;
-      color: #8a1355;
-    }
-
-    .modal-label {
+    .login-label {
       display: block;
+      margin-bottom: 8px;
+      text-align: left;
       font-size: 14px;
       font-weight: 800;
-      margin-bottom: 8px;
-      color: #6d174a;
+      color: #ffffff;
     }
 
-    .modal-input {
+    .login-input {
       width: 100%;
-      border: 2px solid #d94c95;
-      background: #fff9fc;
-      padding: 12px;
+      height: 52px;
+      padding: 0 15px;
+      border-radius: 14px;
+      border: 1px solid #ff2f68;
+      background: #000000;
+      color: #ffffff;
       font-size: 16px;
-      margin-bottom: 14px;
       outline: none;
-      border-radius: 12px;
-      color: #6d174a;
     }
 
-    .modal-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+    .login-input::placeholder {
+      color: #999999;
     }
 
-    .modal-btn {
-      border: 2px solid #b42873;
-      background: #fff8fc;
-      padding: 12px;
-      font-weight: 900;
-      cursor: pointer;
-      text-transform: uppercase;
-      color: #8a1355;
-      border-radius: 12px;
-    }
-
-    .modal-btn.primary {
-      background: linear-gradient(180deg, #ff4fa0 0%, #e83e8c 100%);
-      color: white;
-      border-color: #b42873;
-    }
-
-    .punishment-box { text-align: center; }
-    .punishment-icon { font-size: 42px; margin-bottom: 10px; }
-
-    .punishment-title {
-      font-size: 24px;
-      font-weight: 900;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      color: #8a1355;
-    }
-
-    .punishment-text {
-      font-size: 17px;
-      line-height: 1.45;
-      margin-bottom: 14px;
-      color: #6d174a;
-    }
-
-
-    .punishment-image {
-      width: min(100%, 380px);
-      aspect-ratio: 1 / 1;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto 12px;
-      border-radius: 18px;
-      border: 2px solid #b42873;
-      background: #fff8fc;
-      box-shadow: 0 10px 24px rgba(180,40,115,0.18);
-    }
-
-    .punishment-timer {
-      display: none;
-      margin-top: 12px;
-      padding: 12px;
+    .login-button {
+      width: 100%;
+      height: 54px;
+      margin-top: 16px;
+      border: none;
       border-radius: 14px;
-      background: rgba(255,255,255,0.65);
-      border: 2px dashed #d94c95;
-      color: #8a1355;
-      font-size: 18px;
-      font-weight: 900;
+      background: #ff004c;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 950;
+      text-transform: uppercase;
+      cursor: pointer;
     }
 
-    .punishment-timer.show {
-      display: block;
-    }
-
-    .modal-btn:disabled {
-      opacity: 0.55;
+    .login-button:disabled {
+      opacity: 0.6;
       cursor: not-allowed;
     }
 
-
-    /* Mode khusus setelah tombol Start diklik:
-       popup hanya menampilkan timer besar agar fokus */
-    .modal-overlay.timer-focus {
-      background: rgba(138, 19, 85, 0.72);
-      backdrop-filter: blur(4px);
+    .login-message {
+      min-height: 22px;
+      margin-top: 16px;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.5;
     }
 
-    .modal-overlay.timer-focus .modal-box {
-      width: min(86vw, 390px);
-      aspect-ratio: 1 / 1;
-      display: grid;
-      place-items: center;
-      padding: 18px;
-      background: radial-gradient(circle at top, #fff4fb 0%, #ffd1e6 55%, #ff9cca 100%);
-      border: 6px solid #b42873;
-      border-radius: 34px;
-      box-shadow: 0 28px 80px rgba(80, 0, 45, 0.45);
+    .login-message.error {
+      color: #ff8aa8;
     }
 
-    .modal-overlay.timer-focus .punishment-image,
-    .modal-overlay.timer-focus .punishment-title,
-    .modal-overlay.timer-focus #startPunishmentBtn {
-      display: none !important;
+    .login-message.success {
+      color: #ffffff;
     }
 
-    .modal-overlay.timer-focus .punishment-timer {
-      display: grid !important;
-      place-items: center;
-      width: min(260px, 70vw);
-      height: min(260px, 70vw);
-      margin: 0;
-      padding: 0;
-      border-radius: 50%;
-      border: 8px solid #b42873;
-      background: #fff8fc;
-      color: #8a1355;
-      font-size: clamp(56px, 16vw, 112px);
-      font-weight: 900;
-      line-height: 1;
-      box-shadow:
-        inset 0 -10px 0 rgba(180, 40, 115, 0.12),
-        0 18px 45px rgba(180, 40, 115, 0.35);
-      animation: timerPulse 1s ease-in-out infinite;
+    .login-note {
+      margin: 18px 0 0;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #bbbbbb;
     }
-
-    @keyframes timerPulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.06); }
-      100% { transform: scale(1); }
-    }
-
-
-    /* Teks hukuman disembunyikan: popup hanya gambar + tombol Start */
-    #punishmentTitle {
-      display: none !important;
-    }
-
-
-    /* Popup hukuman tanpa teks judul/nomor */
-    #punishmentTitle,
-    .punishment-title,
-    .punishment-text,
-    .punishment-icon {
-      display: none !important;
-    }
-
-    @media (max-width: 420px) {
-      body { padding: 8px; }
-      .title { font-size: 21px; }
-      .bottom-row { gap: 10px; }
-      .info-box, .dice-box { min-height: 98px; }
-      .turn-label { font-size: 16px; }
-      .turn-player { font-size: 13px; }
-      .dice { width: 62px; height: 62px; font-size: 34px; }
-      .token { width: 21px; height: 21px; font-size: 11px; }
-    }
-
-    /* Layout landscape:
-       judul tetap di atas, papan di kiri, kontrol di kanan */
-    @media (orientation: landscape) and (min-width: 700px) {
-      body {
-        align-items: center;
-        padding: 10px;
-        overflow: auto;
-      }
-
-      .app {
-        width: min(100%, 1080px);
-        display: grid;
-        grid-template-columns: minmax(360px, min(58vw, calc(100vh - 130px))) minmax(250px, 360px);
-        grid-template-rows: auto auto;
-        gap: 12px 18px;
-        align-items: start;
-        justify-content: center;
-      }
-
-      .topbar {
-        grid-column: 1 / -1;
-        margin-bottom: 0;
-        padding-top: 0;
-      }
-
-      .title {
-        margin: 0 60px 2px;
-        font-size: clamp(20px, 3.4vw, 30px);
-      }
-
-      .settings-btn {
-        top: 0;
-        right: 4px;
-        width: 44px;
-        height: 44px;
-        font-size: 22px;
-      }
-
-      .board-frame {
-        grid-column: 1;
-        grid-row: 2;
-        width: 100%;
-        max-height: calc(100vh - 105px);
-        margin: 0;
-      }
-
-      .bottom-row {
-        grid-column: 2;
-        grid-row: 2;
-        margin-top: 0;
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-
-      .info-box,
-      .dice-box {
-        min-height: 118px;
-      }
-
-      .dice {
-        width: 78px;
-        height: 78px;
-        font-size: 42px;
-      }
-
-      .roll-btn {
-        max-width: 230px;
-      }
-
-      .players-mini {
-        grid-column: 2;
-        grid-row: 2;
-        margin-top: 260px;
-        align-self: start;
-      }
-
-      .player-mini {
-        font-size: 13px;
-        padding: 7px 10px;
-      }
-
-      .modal-box {
-        max-height: 92vh;
-        overflow: auto;
-      }
-    }
-
-    @media (orientation: landscape) and (min-width: 700px) and (max-height: 520px) {
-      .app {
-        grid-template-columns: minmax(300px, min(55vw, calc(100vh - 95px))) minmax(240px, 330px);
-        gap: 8px 14px;
-      }
-
-      .title {
-        font-size: clamp(18px, 3vw, 24px);
-      }
-
-      .board-frame {
-        max-height: calc(100vh - 82px);
-        padding: 4px;
-        border-radius: 22px;
-      }
-
-      .board {
-        border-radius: 16px;
-      }
-
-      .info-box,
-      .dice-box {
-        min-height: 88px;
-        padding: 8px;
-      }
-
-      .turn-icon {
-        font-size: 32px;
-      }
-
-      .turn-label {
-        font-size: 15px;
-        margin-bottom: 3px;
-      }
-
-      .turn-player {
-        font-size: 12px;
-      }
-
-      .dice {
-        width: 58px;
-        height: 58px;
-        font-size: 30px;
-      }
-
-      .roll-btn {
-        padding: 8px;
-        font-size: 12px;
-      }
-
-      .players-mini {
-        margin-top: 198px;
-        gap: 5px;
-      }
-
-      .player-mini {
-        font-size: 11px;
-        padding: 5px 8px;
-      }
-
-      .token {
-        width: 18px;
-        height: 18px;
-        font-size: 10px;
-      }
-    }
-
-
-    /* Landscape v2 sesuai contoh:
-       papan kiri, panel kanan berisi judul, dadu, giliran, dan list pemain */
-    @media (orientation: landscape) and (min-width: 700px) {
-      body {
-        padding: 8px;
-        align-items: center;
-        justify-content: center;
-        background: #ffffff;
-        overflow: auto;
-      }
-
-      .app {
-        width: min(100%, 1120px);
-        min-height: min(96vh, 720px);
-        display: grid;
-        grid-template-columns: minmax(360px, min(56vw, calc(100vh - 26px))) minmax(300px, 430px);
-        grid-template-rows: auto auto 1fr;
-        column-gap: 16px;
-        row-gap: 12px;
-        align-items: start;
-        justify-content: center;
-        background: #ffffff;
-        padding: 8px 12px 8px 8px;
-      }
-
-      .board-frame {
-        grid-column: 1;
-        grid-row: 1 / span 3;
-        width: 100%;
-        aspect-ratio: 1 / 1;
-        margin: 0;
-        padding: 6px;
-        border-radius: 26px;
-        border: 4px solid #b42873;
-        box-shadow: none;
-        position: relative;
-      }
-
-      .board-frame::after {
-        content: "";
-        position: absolute;
-        top: -8px;
-        right: -13px;
-        width: 3px;
-        height: calc(100% + 16px);
-        background: #111111;
-        border-radius: 999px;
-      }
-
-      .board {
-        border-radius: 18px;
-      }
-
-      .topbar {
-        grid-column: 2;
-        grid-row: 1;
-        width: 100%;
-        padding: 0;
-        margin: 6px 0 6px;
-        min-height: 88px;
-        display: grid;
-        place-items: center;
-        position: relative;
-      }
-
-      .title {
-        margin: 0;
-        text-align: center;
-        color: #050505;
-        text-shadow: none;
-        font-size: clamp(24px, 4vw, 34px);
-        line-height: 0.95;
-        letter-spacing: 1px;
-      }
-
-      .settings-btn {
-        top: 0;
-        right: 0;
-        width: 38px;
-        height: 38px;
-        font-size: 18px;
-        z-index: 20;
-      }
-
-      .bottom-row {
-        grid-column: 2;
-        grid-row: 2;
-        margin: 0;
-        width: 100%;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-      }
-
-      .dice-box {
-        grid-column: 1;
-        grid-row: 1;
-      }
-
-      .info-box {
-        grid-column: 2;
-        grid-row: 1;
-      }
-
-      .info-box,
-      .dice-box {
-        min-height: 118px;
-        padding: 10px;
-        border-radius: 14px;
-        border: 3px solid #f04aa0;
-        background: linear-gradient(180deg, #ffe4f1 0%, #ffc6df 100%);
-        box-shadow: 0 3px 0 rgba(180,40,115,0.18);
-      }
-
-      .dice {
-        width: 58px;
-        height: 58px;
-        font-size: 32px;
-        border-radius: 15px;
-        margin-bottom: 6px;
-      }
-
-      .roll-btn {
-        width: 128px;
-        max-width: 100%;
-        padding: 9px 8px;
-        border-radius: 10px;
-        font-size: 11px;
-      }
-
-      .turn-wrap {
-        justify-content: center;
-        gap: 8px;
-      }
-
-      .turn-icon {
-        font-size: 34px;
-      }
-
-      .turn-label {
-        font-size: 13px;
-        margin-bottom: 3px;
-      }
-
-      .turn-player {
-        font-size: 12px;
-      }
-
-      .players-mini {
-        grid-column: 2;
-        grid-row: 3;
-        margin-top: 4px;
-        width: 100%;
-        display: grid;
-        gap: 8px;
-      }
-
-      .player-mini {
-        min-height: 32px;
-        border-radius: 9px;
-        border: 2px solid #f04aa0;
-        padding: 6px 10px;
-        font-size: 12px;
-        background: linear-gradient(180deg, #ffe6f2 0%, #ffcde4 100%);
-      }
-
-      .token {
-        width: 22px;
-        height: 22px;
-        font-size: 11px;
-      }
-
-      .modal-box {
-        max-height: 92vh;
-        overflow: auto;
-      }
-    }
-
-    @media (orientation: landscape) and (min-width: 700px) and (max-height: 520px) {
-      body {
-        padding: 5px;
-      }
-
-      .app {
-        width: min(100%, 980px);
-        min-height: auto;
-        grid-template-columns: minmax(300px, min(55vw, calc(100vh - 18px))) minmax(270px, 390px);
-        column-gap: 14px;
-        row-gap: 8px;
-        padding: 5px 9px 5px 5px;
-      }
-
-      .board-frame {
-        padding: 4px;
-        border-radius: 22px;
-      }
-
-      .board-frame::after {
-        right: -11px;
-      }
-
-      .topbar {
-        min-height: 70px;
-        margin: 0;
-      }
-
-      .title {
-        font-size: clamp(20px, 3.4vw, 28px);
-      }
-
-      .settings-btn {
-        width: 32px;
-        height: 32px;
-        font-size: 16px;
-      }
-
-      .bottom-row {
-        gap: 7px;
-      }
-
-      .info-box,
-      .dice-box {
-        min-height: 90px;
-        padding: 8px;
-        border-radius: 12px;
-      }
-
-      .dice {
-        width: 48px;
-        height: 48px;
-        font-size: 27px;
-      }
-
-      .roll-btn {
-        width: 118px;
-        padding: 7px;
-        font-size: 10px;
-      }
-
-      .turn-icon {
-        font-size: 28px;
-      }
-
-      .turn-label {
-        font-size: 11px;
-      }
-
-      .turn-player {
-        font-size: 10px;
-      }
-
-      .players-mini {
-        gap: 5px;
-      }
-
-      .player-mini {
-        min-height: 26px;
-        padding: 4px 8px;
-        font-size: 10px;
-      }
-
-      .token {
-        width: 18px;
-        height: 18px;
-        font-size: 9px;
-      }
-    }
-
-
-    /* Neon intimate glow theme */
-    :root {
-      --neon-pink: #ff2fa3;
-      --neon-hot: #ff007f;
-      --neon-soft: #ffd6ec;
-      --neon-cyan: #29f6ff;
-      --neon-purple: #9b5cff;
-      --neon-deep: #7a0b4f;
-    }
-
-    body {
-      background:
-        radial-gradient(circle at 20% 12%, rgba(255, 47, 163, 0.28), transparent 30%),
-        radial-gradient(circle at 82% 18%, rgba(41, 246, 255, 0.22), transparent 27%),
-        radial-gradient(circle at 50% 88%, rgba(155, 92, 255, 0.20), transparent 35%),
-        linear-gradient(180deg, #2a031c 0%, #5d0a3c 46%, #230218 100%);
-    }
-
-    .neon-title {
-      display: grid;
-      gap: 2px;
-      color: #fff4fb !important;
-      text-shadow:
-        0 0 4px #ffffff,
-        0 0 8px var(--neon-pink),
-        0 0 16px var(--neon-pink),
-        0 0 28px var(--neon-hot),
-        0 0 44px var(--neon-purple);
-      filter: drop-shadow(0 0 14px rgba(255, 47, 163, 0.65));
-      animation: neonBreath 2.6s ease-in-out infinite;
-      position: relative;
-      isolation: isolate;
-    }
-
-    .neon-title span {
-      display: block;
-      position: relative;
-      background: linear-gradient(
-        90deg,
-        #fff 0%,
-        #ffd6ec 18%,
-        #ff2fa3 35%,
-        #29f6ff 50%,
-        #ff2fa3 65%,
-        #ffd6ec 82%,
-        #fff 100%
-      );
-      background-size: 300% 100%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: neonRun 3s linear infinite;
-    }
-
-    .neon-title span::after {
-      content: attr(data-text);
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      color: transparent;
-      text-shadow:
-        0 0 12px var(--neon-pink),
-        0 0 24px var(--neon-hot),
-        0 0 38px var(--neon-cyan);
-      opacity: 0.75;
-    }
-
-    .neon-title::before {
-      content: "";
-      position: absolute;
-      left: -18%;
-      top: -12%;
-      width: 28%;
-      height: 124%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.85), transparent);
-      transform: skewX(-18deg);
-      filter: blur(1px);
-      animation: neonSweep 2.8s ease-in-out infinite;
-      pointer-events: none;
-      mix-blend-mode: screen;
-    }
-
-    @keyframes neonRun {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 300% 50%; }
-    }
-
-    @keyframes neonSweep {
-      0% { left: -30%; opacity: 0; }
-      18% { opacity: 0.85; }
-      54% { opacity: 0.95; }
-      100% { left: 108%; opacity: 0; }
-    }
-
-    @keyframes neonBreath {
-      0%, 100% {
-        text-shadow:
-          0 0 4px #ffffff,
-          0 0 8px var(--neon-pink),
-          0 0 16px var(--neon-pink),
-          0 0 28px var(--neon-hot),
-          0 0 44px var(--neon-purple);
-      }
-      50% {
-        text-shadow:
-          0 0 6px #ffffff,
-          0 0 14px var(--neon-cyan),
-          0 0 24px var(--neon-pink),
-          0 0 42px var(--neon-hot),
-          0 0 62px var(--neon-purple);
-      }
-    }
-
-    .board-frame,
-    .info-box,
-    .dice-box,
-    .player-mini,
-    .modal-box {
-      box-shadow:
-        0 0 0 1px rgba(255,255,255,0.25),
-        0 0 12px rgba(255,47,163,0.42),
-        0 0 26px rgba(255,47,163,0.28),
-        0 0 42px rgba(41,246,255,0.12) !important;
-    }
-
-    .board-frame {
-      border-color: var(--neon-pink) !important;
-      background:
-        linear-gradient(180deg, rgba(255,214,236,0.95), rgba(255,47,163,0.40)) !important;
-    }
-
-    .board-frame::before {
-      content: "";
-      position: absolute;
-      inset: -4px;
-      border-radius: inherit;
-      pointer-events: none;
-      border: 2px solid rgba(41,246,255,0.55);
-      opacity: 0.75;
-      filter: drop-shadow(0 0 12px rgba(41,246,255,0.55));
-      animation: borderPulse 2.4s ease-in-out infinite;
-      z-index: 7;
-    }
-
-    @keyframes borderPulse {
-      0%, 100% { opacity: 0.35; }
-      50% { opacity: 0.95; }
-    }
-
-    .info-box,
-    .dice-box,
-    .player-mini {
-      border-color: rgba(255,47,163,0.95) !important;
-      background:
-        linear-gradient(180deg, rgba(255,235,247,0.96), rgba(255,161,207,0.92)) !important;
-    }
-
-    .dice {
-      border-color: var(--neon-cyan) !important;
-      box-shadow:
-        inset 0 -5px 0 rgba(255,47,163,0.16),
-        0 0 12px rgba(41,246,255,0.55),
-        0 0 24px rgba(255,47,163,0.35) !important;
-    }
-
-    .roll-btn,
-    .modal-btn.primary {
-      background: linear-gradient(90deg, #ff2fa3, #ff007f, #9b5cff, #29f6ff, #ff2fa3) !important;
-      background-size: 300% 100% !important;
-      border-color: rgba(255,255,255,0.65) !important;
-      box-shadow:
-        0 0 10px rgba(255,47,163,0.65),
-        0 0 22px rgba(41,246,255,0.22) !important;
-      animation: neonButtonRun 3.2s linear infinite;
-    }
-
-    @keyframes neonButtonRun {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 300% 50%; }
-    }
-
-    .settings-btn {
-      border-color: var(--neon-cyan) !important;
-      box-shadow:
-        0 0 10px rgba(41,246,255,0.65),
-        0 0 22px rgba(255,47,163,0.35) !important;
-      animation: settingsGlow 2s ease-in-out infinite;
-    }
-
-    @keyframes settingsGlow {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.06); }
-    }
-
-    .modal-overlay.show {
-      background:
-        radial-gradient(circle at 50% 20%, rgba(255,47,163,0.45), transparent 34%),
-        rgba(25, 0, 18, 0.72);
-      backdrop-filter: blur(5px);
-    }
-
-    .modal-box {
-      border-color: var(--neon-pink) !important;
-      background:
-        radial-gradient(circle at top, rgba(255,255,255,0.96), rgba(255,214,236,0.96) 52%, rgba(255,151,203,0.94)) !important;
-    }
-
-    .modal-label,
-    .turn-label,
-    .turn-player,
-    .player-mini {
-      text-shadow: 0 0 8px rgba(255,47,163,0.18);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .neon-title,
-      .neon-title span,
-      .neon-title::before,
-      .board-frame::before,
-      .roll-btn,
-      .modal-btn.primary,
-      .settings-btn,
-      .dice {
-        animation: none !important;
-      }
-    }
-
-
-    /* Landscape full-board override:
-       papan dibuat full atas-bawah, judul diperkecil, panel kanan naik */
-    @media (orientation: landscape) and (min-width: 700px) {
-      body {
-        padding: 4px !important;
-        align-items: center !important;
-        justify-content: center !important;
-        min-height: 100vh;
-        overflow: hidden;
-      }
-
-      .app {
-        width: min(100%, 1180px) !important;
-        height: calc(100vh - 8px) !important;
-        min-height: 0 !important;
-        display: grid !important;
-        grid-template-columns: minmax(320px, calc(100vh - 8px)) minmax(310px, 1fr) !important;
-        grid-template-rows: 54px 148px 1fr !important;
-        column-gap: 16px !important;
-        row-gap: 8px !important;
-        align-items: start !important;
-        justify-content: center !important;
-        padding: 0 8px 0 0 !important;
-        background: rgba(255,255,255,0.78) !important;
-      }
-
-      .board-frame {
-        grid-column: 1 !important;
-        grid-row: 1 / -1 !important;
-        width: calc(100vh - 8px) !important;
-        height: calc(100vh - 8px) !important;
-        max-width: 100% !important;
-        max-height: none !important;
-        aspect-ratio: 1 / 1 !important;
-        margin: 0 !important;
-        padding: 5px !important;
-        border-radius: 24px !important;
-      }
-
-      .board-frame::after {
-        right: -11px !important;
-        top: 0 !important;
-        height: 100% !important;
-      }
-
-      .board {
-        border-radius: 17px !important;
-      }
-
-      .topbar {
-        grid-column: 2 !important;
-        grid-row: 1 !important;
-        min-height: 0 !important;
-        height: 54px !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        display: grid !important;
-        place-items: center !important;
-      }
-
-      .title {
-        margin: 0 48px 0 12px !important;
-        font-size: clamp(17px, 2.55vw, 25px) !important;
-        line-height: 0.92 !important;
-        letter-spacing: 1px !important;
-      }
-
-      .settings-btn {
-        width: 36px !important;
-        height: 36px !important;
-        font-size: 17px !important;
-        top: 6px !important;
-        right: 6px !important;
-      }
-
-      .bottom-row {
-        grid-column: 2 !important;
-        grid-row: 2 !important;
-        margin: 0 !important;
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        gap: 8px !important;
-        width: 100% !important;
-        align-self: start !important;
-      }
-
-      .info-box,
-      .dice-box {
-        min-height: 142px !important;
-        height: 142px !important;
-        padding: 8px !important;
-        border-radius: 16px !important;
-      }
-
-      .dice {
-        width: 58px !important;
-        height: 58px !important;
-        font-size: 31px !important;
-        margin-bottom: 7px !important;
-      }
-
-      .roll-btn {
-        width: 142px !important;
-        max-width: 100% !important;
-        padding: 9px 8px !important;
-        font-size: 11px !important;
-      }
-
-      .turn-wrap {
-        justify-content: center !important;
-        gap: 8px !important;
-      }
-
-      .turn-icon {
-        font-size: 34px !important;
-      }
-
-      .turn-label {
-        font-size: 13px !important;
-        margin-bottom: 4px !important;
-      }
-
-      .turn-player {
-        font-size: 12px !important;
-      }
-
-      .players-mini {
-        grid-column: 2 !important;
-        grid-row: 3 !important;
-        margin-top: 0 !important;
-        display: grid !important;
-        gap: 7px !important;
-        width: 100% !important;
-        align-self: start !important;
-      }
-
-      .player-mini {
-        min-height: 30px !important;
-        padding: 5px 10px !important;
-        font-size: 11px !important;
-        border-radius: 9px !important;
-      }
-
-      .token {
-        width: 21px !important;
-        height: 21px !important;
-        font-size: 10px !important;
-      }
-    }
-
-    @media (orientation: landscape) and (min-width: 700px) and (max-height: 430px) {
-      .app {
-        grid-template-rows: 48px 128px 1fr !important;
-        column-gap: 14px !important;
-        row-gap: 6px !important;
-      }
-
-      .topbar {
-        height: 48px !important;
-      }
-
-      .title {
-        font-size: clamp(15px, 2.25vw, 21px) !important;
-        filter: drop-shadow(0 0 8px rgba(255, 47, 163, 0.55)) !important;
-      }
-
-      .settings-btn {
-        width: 32px !important;
-        height: 32px !important;
-        font-size: 15px !important;
-      }
-
-      .info-box,
-      .dice-box {
-        min-height: 124px !important;
-        height: 124px !important;
-        padding: 7px !important;
-      }
-
-      .dice {
-        width: 50px !important;
-        height: 50px !important;
-        font-size: 27px !important;
-      }
-
-      .roll-btn {
-        width: 128px !important;
-        padding: 8px 7px !important;
-        font-size: 10px !important;
-      }
-
-      .turn-icon {
-        font-size: 29px !important;
-      }
-
-      .turn-label {
-        font-size: 11px !important;
-      }
-
-      .turn-player {
-        font-size: 10px !important;
-      }
-
-      .players-mini {
-        gap: 5px !important;
-      }
-
-      .player-mini {
-        min-height: 26px !important;
-        padding: 4px 8px !important;
-        font-size: 10px !important;
-      }
-
-      .token {
-        width: 18px !important;
-        height: 18px !important;
-        font-size: 9px !important;
-      }
-    }
-
   </style>
 </head>
+
 <body>
-  <div class="app">
-    <div class="topbar">
-      <div class="title neon-title"><span data-text="ULAR TANGGA">ULAR TANGGA</span><span data-text="BERCANDA">DEWASA</span></div>
-      <button class="settings-btn" id="openSettingsBtn" title="Setting">⚙️</button>
-    </div>
+  <div class="login-box">
+    <h1 class="login-title">Login Game</h1>
 
-    <div class="board-frame">
-      <div id="board" class="board">
-        <svg id="lines" class="lines"></svg>
-        <div id="tokens" class="tokens"></div>
-      </div>
-    </div>
+    <p class="login-subtitle">
+      Masukkan email yang sudah terdaftar untuk membuka akses game.
+    </p>
 
-    <div class="bottom-row">
-      <div class="info-box">
-        <div class="turn-wrap">
-          <div class="turn-icon">♟️</div>
-          <div>
-            <div class="turn-label">Giliran :</div>
-            <div id="turnPlayer" class="turn-player">Belum diatur</div>
-          </div>
-        </div>
-      </div>
+    <form id="loginForm">
+      <label class="login-label" for="emailInput">Email</label>
 
-      <div class="dice-box">
-        <div class="dice-area">
-          <div id="dice" class="dice">🎲</div>
-          <button id="rollBtn" class="roll-btn">Putar Dadu</button>
-        </div>
-      </div>
-    </div>
+      <input
+        class="login-input"
+        type="email"
+        id="emailInput"
+        placeholder="contoh@email.com"
+        required
+      >
 
-    <div id="statusBox" class="status-box"></div>
-    <div id="playersMini" class="players-mini"></div>
-  </div>
+      <button class="login-button" type="submit" id="loginButton">
+        Masuk ke Game
+      </button>
 
-  <div id="settingsModal" class="modal-overlay">
-    <div class="modal-box">
-      <div class="modal-title">Mulai Permainan</div>
+      <div class="login-message" id="loginMessage"></div>
+    </form>
 
-      <label for="playerCount" class="modal-label">Jumlah Pemain (2 - 6)</label>
-      <input type="number" id="playerCount" class="modal-input" min="2" max="6" value="2" />
-
-      <label for="punishmentDuration" class="modal-label">Durasi Hukuman</label>
-      <select id="punishmentDuration" class="modal-input">
-        <option value="10">10 detik</option>
-        <option value="15" selected>15 detik</option>
-        <option value="20">20 detik</option>
-        <option value="25">25 detik</option>
-        <option value="30">30 detik</option>
-        <option value="45">45 detik</option>
-        <option value="60">1 menit</option>
-        <option value="120">2 menit</option>
-        <option value="180">3 menit</option>
-        <option value="240">4 menit</option>
-        <option value="300">5 menit</option>
-      </select>
-
-      <div class="modal-actions">
-        <button class="modal-btn" id="closeSettingsBtn">Tutup</button>
-        <button class="modal-btn primary" id="saveSettingsBtn">Mulai</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="punishmentModal" class="modal-overlay">
-    <div class="modal-box punishment-box">
-      <img id="punishmentImage" class="punishment-image" src="no4.png" alt="">
-      <div id="punishmentTitle" class="punishment-title"></div>
-      <button class="modal-btn primary" id="startPunishmentBtn">Start</button>
-      <div id="punishmentTimer" class="punishment-timer">15</div>
-    </div>
+    <p class="login-note">
+      Akses hanya untuk email yang ada di daftar pembeli.
+    </p>
   </div>
 
   <script>
-    const board = document.getElementById("board");
-    const tokensLayer = document.getElementById("tokens");
-    const diceBox = document.getElementById("dice");
-    const rollBtn = document.getElementById("rollBtn");
-    const statusBox = document.getElementById("statusBox");
-    const playersMini = document.getElementById("playersMini");
-    const turnPlayer = document.getElementById("turnPlayer");
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxB2jiaPZSU3jxmYbFbA4zlG8aWmyOkbIvPeGjcvwUgh8k9sJZqPW1D6Wtfh0fKqQnC/exec";
+    const GAME_URL = "./game.html";
 
-    const settingsModal = document.getElementById("settingsModal");
-    const punishmentModal = document.getElementById("punishmentModal");
-    const punishmentImage = document.getElementById("punishmentImage");
-    const punishmentTitle = document.getElementById("punishmentTitle");
-    const startPunishmentBtn = document.getElementById("startPunishmentBtn");
-    const punishmentTimer = document.getElementById("punishmentTimer");
-    const playerCountInput = document.getElementById("playerCount");
-    const punishmentDurationSelect = document.getElementById("punishmentDuration");
+    const form = document.getElementById("loginForm");
+    const emailInput = document.getElementById("emailInput");
+    const button = document.getElementById("loginButton");
+    const message = document.getElementById("loginMessage");
 
-    const openSettingsBtn = document.getElementById("openSettingsBtn");
-    const closeSettingsBtn = document.getElementById("closeSettingsBtn");
-    const saveSettingsBtn = document.getElementById("saveSettingsBtn");
-    let punishmentCountdownInterval = null;
-
-    const snakes = {
-      15: 7,
-      44: 22,
-      68: 34,
-      92: 87,
-      98: 77
-    };
-
-    const ladders = {
-      3: 24,
-      27: 35,
-      42: 78,
-      49: 71,
-      67: 95
-    };
-
-    const punishmentCells = [2, 4, 7, 10, 12, 16, 18, 19, 20, 24, 26, 28, 30, 32, 33, 36, 39, 43, 44, 46, 47, 50, 51, 54, 56, 58, 60, 63, 64, 66, 68, 69, 72, 73, 76, 79, 80, 82, 85, 89, 91, 94, 97, 99, 100];
-    const punishmentData = {
-      2: { title: "", image: "no2.png" },
-      4: { title: "", image: "no4.png" },
-      7: { title: "", image: "no7.png" },
-      10: { title: "", image: "no10.png" },
-      12: { title: "", image: "no12.png" },
-      16: { title: "", image: "no16.png" },
-      18: { title: "", image: "no18.png" },
-      19: { title: "", image: "no19.png" },
-      20: { title: "", image: "no20.png" },
-      24: { title: "", image: "no24.png" },
-      26: { title: "", image: "no26.png" },
-      28: { title: "", image: "no28.png" },
-      30: { title: "", image: "no30.png" },
-      32: { title: "", image: "no32.png" },
-      33: { title: "", image: "no33.png" },
-      36: { title: "", image: "no36.png" },
-      39: { title: "", image: "no39.png" },
-      43: { title: "", image: "no43.png" },
-      44: { title: "", image: "no44.png" },
-      46: { title: "", image: "no46.png" },
-      47: { title: "", image: "no47.png" },
-      50: { title: "", image: "no50.png" },
-      51: { title: "", image: "no51.png" },
-      54: { title: "", image: "no54.png" },
-      56: { title: "", image: "no56.png" },
-      58: { title: "", image: "no58.png" },
-      60: { title: "", image: "no60.png" },
-      63: { title: "", image: "no63.png" },
-      64: { title: "", image: "no64.png" },
-      66: { title: "", image: "no66.png" },
-      68: { title: "", image: "no68.png" },
-      69: { title: "", image: "no69.png" },
-      72: { title: "", image: "no72.png" },
-      73: { title: "", image: "no73.png" },
-      76: { title: "", image: "no76.png" },
-      79: { title: "", image: "no79.png" },
-      80: { title: "", image: "no80.png" },
-      82: { title: "", image: "no82.png" },
-      85: { title: "", image: "no85.png" },
-      89: { title: "", image: "no89.png" },
-      91: { title: "", image: "no91.png" },
-      94: { title: "", image: "no94.png" },
-      97: { title: "", image: "no97.png" },
-      99: { title: "", image: "no99.png" },
-      100: { title: "", image: "no100.png" }
-    };
-    const playerColors = ["#e53935", "#1e88e5", "#43a047", "#8e24aa", "#fb8c00", "#00897b"];
-
-    let players = [];
-    let currentPlayer = 0;
-    let gameStarted = false;
-    let gameOver = false;
-    let popupCloseCallback = null;
-    let punishmentDurationSeconds = 15;
-
-    function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = "login-message " + type;
     }
 
-    function createBoard() {
-      board.querySelectorAll(".cell").forEach(cell => cell.remove());
+    function jsonpLogin(email, callback) {
+      const callbackName = "loginCallback_" + Date.now();
 
-      const displayNumbers = [];
-      for (let row = 9; row >= 0; row--) {
-        const start = row * 10 + 1;
-        const nums = Array.from({ length: 10 }, (_, i) => start + i);
-
-        if ((9 - row) % 2 === 0) nums.reverse();
-        displayNumbers.push(...nums);
-      }
-
-      displayNumbers.forEach(num => {
-        const cell = document.createElement("div");
-        cell.className = "cell";
-        cell.dataset.num = num;
-        board.appendChild(cell);
-      });
-    }
-
-    function getCellCenter(num) {
-      const cell = board.querySelector(`.cell[data-num="${num}"]`);
-      const boardRect = board.getBoundingClientRect();
-      const cellRect = cell.getBoundingClientRect();
-
-      return {
-        x: cellRect.left - boardRect.left + cellRect.width / 2,
-        y: cellRect.top - boardRect.top + cellRect.height / 2
+      window[callbackName] = function(data) {
+        callback(data);
+        delete window[callbackName];
+        script.remove();
       };
+
+      const script = document.createElement("script");
+
+      script.src =
+        WEB_APP_URL +
+        "?email=" + encodeURIComponent(email) +
+        "&callback=" + callbackName;
+
+      script.onerror = function() {
+        callback({
+          ok: false,
+          message: "Gagal terhubung ke server login."
+        });
+
+        delete window[callbackName];
+        script.remove();
+      };
+
+      document.body.appendChild(script);
     }
 
-    function openSettings() {
-      if (!gameStarted) {
-        closeSettingsBtn.style.display = "none";
-        saveSettingsBtn.textContent = "Mulai";
-      } else {
-        closeSettingsBtn.style.display = "block";
-        saveSettingsBtn.textContent = "Simpan";
-      }
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
 
-      settingsModal.classList.add("show");
-    }
+      const email = emailInput.value.trim().toLowerCase();
 
-    function closeSettings() {
-      if (!gameStarted) return;
-      settingsModal.classList.remove("show");
-    }
-
-    function saveSettings() {
-      const count = Number(playerCountInput.value);
-      punishmentDurationSeconds = Number(punishmentDurationSelect.value) || 15;
-
-      if (count < 2 || count > 6) {
+      if (!email || !email.includes("@")) {
+        showMessage("Masukkan email yang benar.", "error");
         return;
       }
 
-      players = Array.from({ length: count }, (_, i) => ({
-        name: `Pemain ${i + 1}`,
-        position: 1,
-        color: playerColors[i]
-      }));
+      button.disabled = true;
+      button.textContent = "Mengecek...";
+      showMessage("Sebentar, email sedang dicek...", "success");
 
-      currentPlayer = 0;
-      gameStarted = true;
-      gameOver = false;
-      rollBtn.disabled = false;
-      diceBox.textContent = "🎲";
+      jsonpLogin(email, function(result) {
+        if (result.ok) {
+          localStorage.setItem("game_pasutri_email", result.email);
+          localStorage.setItem("game_pasutri_login_at", Date.now());
 
-      renderTokens();
-      renderPlayersMini();
-      updateTurnDisplay();
-      closeSettings();
-    }
+          showMessage("Login berhasil. Mengalihkan ke game...", "success");
 
-    function renderTokens() {
-      tokensLayer.innerHTML = "";
-
-      players.forEach((player, index) => {
-        const token = document.createElement("div");
-        token.className = "token";
-        token.id = `token-${index}`;
-        token.textContent = index + 1;
-        token.style.background = player.color;
-        tokensLayer.appendChild(token);
-        moveToken(index, player.position, true);
-      });
-    }
-
-    function moveToken(playerIndex, position, instant = false) {
-      const token = document.getElementById(`token-${playerIndex}`);
-      if (!token) return;
-
-      const center = getCellCenter(position);
-      const boardRect = board.getBoundingClientRect();
-
-      const offsetPattern = [
-        [-7, -7], [7, -7], [-7, 7],
-        [7, 7], [0, -10], [0, 10]
-      ];
-      const offset = offsetPattern[playerIndex] || [0, 0];
-
-      if (instant) {
-        token.style.transition = "none";
-        setTimeout(() => token.style.transition = "", 40);
-      }
-
-      token.style.left = `${(center.x / boardRect.width) * 100}%`;
-      token.style.top = `${(center.y / boardRect.height) * 100}%`;
-      token.style.marginLeft = `${offset[0]}px`;
-      token.style.marginTop = `${offset[1]}px`;
-
-      token.classList.add("step-pop");
-      setTimeout(() => token.classList.remove("step-pop"), 150);
-    }
-
-    async function walkStepByStep(playerIndex, from, to) {
-      const direction = to > from ? 1 : -1;
-      let position = from;
-
-      while (position !== to) {
-        position += direction;
-        players[playerIndex].position = position;
-        moveToken(playerIndex, position);
-        renderPlayersMini();
-        updateTurnDisplay();
-        await sleep(360);
-      }
-    }
-
-    function renderPlayersMini() {
-      playersMini.innerHTML = "";
-
-      players.forEach((player, index) => {
-        const item = document.createElement("div");
-        item.className = "player-mini" + (index === currentPlayer && !gameOver ? " active" : "");
-        item.innerHTML = `
-          <span style="color:${player.color}">${player.name}</span>
-          <span>Posisi: ${player.position}</span>
-        `;
-        playersMini.appendChild(item);
-      });
-    }
-
-    function updateTurnDisplay() {
-      turnPlayer.textContent = players.length ? players[currentPlayer].name : "Belum diatur";
-    }
-
-    function formatTimer(totalSeconds) {
-      if (totalSeconds < 60) return String(totalSeconds);
-
-      const minutes = Math.floor(totalSeconds / 60);
-      const seconds = totalSeconds % 60;
-      return `${minutes}:${String(seconds).padStart(2, "0")}`;
-    }
-
-    function showPunishmentPopup(position) {
-      return new Promise(resolve => {
-        const data = punishmentData[position] || { title: "", image: `no${position}.png` };
-        punishmentImage.onerror = () => {
-          punishmentImage.onerror = null;
-          punishmentImage.src = "no4.png";
-        };
-        punishmentImage.src = data.image;
-        punishmentTitle.innerHTML = "";
-        punishmentModal.classList.remove("timer-focus");
-        punishmentTimer.textContent = formatTimer(punishmentDurationSeconds);
-        punishmentTimer.classList.remove("show");
-        startPunishmentBtn.disabled = false;
-        startPunishmentBtn.textContent = "Start";
-        popupCloseCallback = resolve;
-        punishmentModal.classList.add("show");
-      });
-    }
-
-    function startPunishmentTimer() {
-      if (!popupCloseCallback) return;
-
-      let seconds = punishmentDurationSeconds;
-      punishmentModal.classList.add("timer-focus");
-      startPunishmentBtn.disabled = true;
-      startPunishmentBtn.textContent = "Berjalan...";
-      punishmentTimer.textContent = formatTimer(seconds);
-      punishmentTimer.classList.add("show");
-
-      if (punishmentCountdownInterval) {
-        clearInterval(punishmentCountdownInterval);
-      }
-
-      punishmentCountdownInterval = setInterval(() => {
-        seconds--;
-        punishmentTimer.textContent = formatTimer(seconds);
-
-        if (seconds <= 0) {
-          clearInterval(punishmentCountdownInterval);
-          punishmentCountdownInterval = null;
-          closePunishmentPopup();
+          setTimeout(function() {
+            window.location.href = GAME_URL;
+          }, 700);
+        } else {
+          showMessage(result.message || "Email belum terdaftar.", "error");
+          button.disabled = false;
+          button.textContent = "Masuk ke Game";
         }
-      }, 1000);
-    }
-
-    function closePunishmentPopup() {
-      punishmentModal.classList.remove("show");
-      punishmentModal.classList.remove("timer-focus");
-
-      if (punishmentCountdownInterval) {
-        clearInterval(punishmentCountdownInterval);
-        punishmentCountdownInterval = null;
-      }
-
-      if (popupCloseCallback) {
-        popupCloseCallback();
-        popupCloseCallback = null;
-      }
-    }
-
-    function rollDice() {
-      if (!gameStarted || gameOver) return;
-
-      rollBtn.disabled = true;
-      diceBox.classList.add("rolling");
-
-      const diceInterval = setInterval(() => {
-        diceBox.textContent = Math.floor(Math.random() * 6) + 1;
-      }, 90);
-
-      setTimeout(() => {
-        clearInterval(diceInterval);
-        diceBox.classList.remove("rolling");
-        const diceValue = Math.floor(Math.random() * 6) + 1;
-        diceBox.textContent = diceValue;
-        playTurn(diceValue);
-      }, 900);
-    }
-
-    async function playTurn(diceValue) {
-      const player = players[currentPlayer];
-      const playerIndex = currentPlayer;
-      const oldPosition = player.position;
-      const targetPosition = oldPosition + diceValue;
-
-      if (targetPosition > 100) {
-        nextPlayer();
-        return;
-      }
-
-      await walkStepByStep(playerIndex, oldPosition, targetPosition);
-
-      if (snakes[player.position]) {
-        const from = player.position;
-        const to = snakes[player.position];
-        await sleep(450);
-        await walkStepByStep(playerIndex, from, to);
-      } else if (ladders[player.position]) {
-        const from = player.position;
-        const to = ladders[player.position];
-        await sleep(450);
-        await walkStepByStep(playerIndex, from, to);
-      }
-
-      if (punishmentCells.includes(player.position)) {
-        await sleep(300);
-        await showPunishmentPopup(player.position);
-      }
-
-      if (player.position === 100) {
-        gameOver = true;
-        rollBtn.disabled = true;
-        renderPlayersMini();
-        updateTurnDisplay();
-        setTimeout(() => alert(`${player.name} menang!`), 200);
-        return;
-      }
-
-      nextPlayer();
-    }
-
-    function nextPlayer() {
-      setTimeout(() => {
-        if (gameOver) return;
-        currentPlayer = (currentPlayer + 1) % players.length;
-        renderPlayersMini();
-        updateTurnDisplay();
-        rollBtn.disabled = false;
-      }, 500);
-    }
-
-    openSettingsBtn.addEventListener("click", openSettings);
-    closeSettingsBtn.addEventListener("click", closeSettings);
-    saveSettingsBtn.addEventListener("click", saveSettings);
-    startPunishmentBtn.addEventListener("click", startPunishmentTimer);
-    rollBtn.addEventListener("click", rollDice);
-
-    settingsModal.addEventListener("click", (e) => {
-      if (e.target === settingsModal && gameStarted) closeSettings();
+      });
     });
-
-    punishmentModal.addEventListener("click", (e) => {
-      // Modal hukuman tidak ditutup dengan klik luar.
-      // Pemain harus klik Start dan menunggu timer selesai.
-    });
-
-    window.addEventListener("resize", () => {
-      players.forEach((player, index) => moveToken(index, player.position, true));
-    });
-
-    createBoard();
-    updateTurnDisplay();
-    rollBtn.disabled = true;
-    openSettings();
   </script>
 </body>
 </html>
