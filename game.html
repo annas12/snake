@@ -1334,6 +1334,101 @@
       }
     }
 
+  
+    /* PERFORMANCE MODE: TANPA NEON, TANPA ANIMASI BERAT */
+    body {
+      background: linear-gradient(180deg, #ffd9ec 0%, #ffc1de 45%, #ffb0d3 100%) !important;
+    }
+
+    .title {
+      color: #8a1355 !important;
+      text-shadow: none !important;
+      filter: none !important;
+      animation: none !important;
+      line-height: 0.95 !important;
+    }
+
+    .neon-title,
+    .neon-title span,
+    .neon-title::before,
+    .board-frame::before,
+    .roll-btn,
+    .modal-btn.primary,
+    .settings-btn,
+    .dice,
+    .punishment-timer,
+    .modal-box {
+      animation: none !important;
+      filter: none !important;
+      text-shadow: none !important;
+    }
+
+    .neon-title::before,
+    .board-frame::before {
+      display: none !important;
+      content: none !important;
+    }
+
+    .settings-btn {
+      transform: none !important;
+    }
+
+    .modal-overlay.show {
+      backdrop-filter: none !important;
+    }
+
+    .board-frame,
+    .info-box,
+    .dice-box,
+    .player-mini,
+    .modal-box,
+    .dice,
+    .roll-btn,
+    .modal-btn.primary,
+    .settings-btn,
+    .punishment-image,
+    .punishment-timer {
+      box-shadow: none !important;
+    }
+
+    .roll-btn,
+    .modal-btn.primary {
+      background: linear-gradient(180deg, #ff4fa0 0%, #e83e8c 100%) !important;
+      background-size: auto !important;
+    }
+
+    .settings-btn {
+      border-color: #b42873 !important;
+      background: linear-gradient(180deg, #ffe1ef 0%, #ffbfdc 100%) !important;
+    }
+
+    .token {
+      left: 0 !important;
+      top: 0 !important;
+      margin-left: 0 !important;
+      margin-top: 0 !important;
+      transform: translate3d(var(--x, 0px), var(--y, 0px), 0) translate(-50%, -50%) !important;
+      transition: transform 0.22s linear !important;
+      will-change: transform;
+      backface-visibility: hidden;
+    }
+
+    .token.step-pop {
+      transform: translate3d(var(--x, 0px), var(--y, 0px), 0) translate(-50%, -50%) scale(1.06) !important;
+    }
+
+    .modal-box {
+      animation: none !important;
+    }
+
+    .modal-overlay.timer-focus .punishment-timer {
+      animation: none !important;
+    }
+
+    .dice.rolling {
+      animation: none !important;
+    }
+
   </style>
 </head>
 <body>
@@ -1414,7 +1509,7 @@
 </script>
   <div class="app">
     <div class="topbar">
-      <div class="title neon-title"><span data-text="ULAR TANGGA">ULAR TANGGA</span><span data-text="BERCANDA">DEWASA</span></div>
+      <div class="title">ULAR TANGGA<br>DEWASA</div>
       <button class="settings-btn" id="openSettingsBtn" title="Setting">⚙️</button>
     </div>
 
@@ -1607,13 +1702,21 @@
     }
 
     function getCellCenter(num) {
-      const cell = board.querySelector(`.cell[data-num="${num}"]`);
-      const boardRect = board.getBoundingClientRect();
-      const cellRect = cell.getBoundingClientRect();
+      const boardWidth = board.clientWidth;
+      const boardHeight = board.clientHeight;
+      const cellWidth = boardWidth / 10;
+      const cellHeight = boardHeight / 10;
+
+      const zeroBased = num - 1;
+      const rowFromBottom = Math.floor(zeroBased / 10);
+      const indexInRow = zeroBased % 10;
+
+      const visualRow = 9 - rowFromBottom;
+      const visualCol = rowFromBottom % 2 === 0 ? indexInRow : 9 - indexInRow;
 
       return {
-        x: cellRect.left - boardRect.left + cellRect.width / 2,
-        y: cellRect.top - boardRect.top + cellRect.height / 2
+        x: visualCol * cellWidth + cellWidth / 2,
+        y: visualRow * cellHeight + cellHeight / 2
       };
     }
 
@@ -1679,7 +1782,6 @@
       if (!token) return;
 
       const center = getCellCenter(position);
-      const boardRect = board.getBoundingClientRect();
 
       const offsetPattern = [
         [-7, -7], [7, -7], [-7, 7],
@@ -1689,16 +1791,19 @@
 
       if (instant) {
         token.style.transition = "none";
-        setTimeout(() => token.style.transition = "", 40);
+        requestAnimationFrame(() => {
+          token.style.transition = "";
+        });
       }
 
-      token.style.left = `${(center.x / boardRect.width) * 100}%`;
-      token.style.top = `${(center.y / boardRect.height) * 100}%`;
-      token.style.marginLeft = `${offset[0]}px`;
-      token.style.marginTop = `${offset[1]}px`;
+      const x = center.x + offset[0];
+      const y = center.y + offset[1];
+
+      token.style.setProperty("--x", `${x}px`);
+      token.style.setProperty("--y", `${y}px`);
 
       token.classList.add("step-pop");
-      setTimeout(() => token.classList.remove("step-pop"), 150);
+      setTimeout(() => token.classList.remove("step-pop"), 120);
     }
 
     async function walkStepByStep(playerIndex, from, to) {
@@ -1709,10 +1814,11 @@
         position += direction;
         players[playerIndex].position = position;
         moveToken(playerIndex, position);
-        renderPlayersMini();
-        updateTurnDisplay();
-        await sleep(360);
+        await sleep(240);
       }
+
+      renderPlayersMini();
+      updateTurnDisplay();
     }
 
     function renderPlayersMini() {
@@ -1887,8 +1993,18 @@
       // Pemain harus klik Start dan menunggu timer selesai.
     });
 
+    let resizeFrame = null;
+
     window.addEventListener("resize", () => {
-      players.forEach((player, index) => moveToken(index, player.position, true));
+      if (resizeFrame) {
+        cancelAnimationFrame(resizeFrame);
+      }
+
+      resizeFrame = requestAnimationFrame(() => {
+        players.forEach((player, index) => {
+          moveToken(index, player.position, true);
+        });
+      });
     });
 
     createBoard();
