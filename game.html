@@ -1430,11 +1430,6 @@
     }
 
   
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
     .game-menu-box {
       max-width: 380px;
       text-align: center;
@@ -1459,6 +1454,7 @@
 
     .game-menu-trigger {
       width: auto;
+      justify-self: start;
       min-width: 46px;
       padding-inline: 12px;
       display: inline-flex;
@@ -1553,11 +1549,9 @@
 </script>
   <div class="app">
     <div class="topbar">
+      <button class="settings-btn game-menu-trigger" id="openGameMenuBtn" title="Buka pilihan game">🎮 <span>Game Lainnya</span></button>
       <div class="title">ULAR TANGGA<br>DEWASA</div>
-      <div class="top-actions">
-        <button class="settings-btn game-menu-trigger" id="openGameMenuBtn" title="Buka pilihan game">🎮 <span>Game Lainnya</span></button>
-        <button class="settings-btn" id="openSettingsBtn" title="Setting">⚙️</button>
-      </div>
+      <button class="settings-btn" id="openSettingsBtn" title="Setting">⚙️</button>
     </div>
 
     <div class="board-frame">
