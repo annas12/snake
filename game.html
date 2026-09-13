@@ -1429,7 +1429,34 @@
       animation: none !important;
     }
 
-  </style>
+  
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .game-menu-box {
+      max-width: 380px;
+      text-align: center;
+    }
+    .game-menu-text {
+      margin: 0 0 18px;
+      color: #666;
+      line-height: 1.5;
+    }
+    .game-menu-actions {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .game-hub-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-sizing: border-box;
+    }
+</style>
 </head>
 <body>
   <script>
@@ -1510,7 +1537,10 @@
   <div class="app">
     <div class="topbar">
       <div class="title">ULAR TANGGA<br>DEWASA</div>
-      <button class="settings-btn" id="openSettingsBtn" title="Setting">⚙️</button>
+      <div class="top-actions">
+        <button class="settings-btn" id="openGameMenuBtn" title="Game lainnya">🎮</button>
+        <button class="settings-btn" id="openSettingsBtn" title="Setting">⚙️</button>
+      </div>
     </div>
 
     <div class="board-frame">
@@ -1572,6 +1602,18 @@
     </div>
   </div>
 
+  <div id="gameMenuModal" class="modal-overlay">
+    <div class="modal-box game-menu-box">
+      <div class="modal-title">Pilih Permainan</div>
+      <p class="game-menu-text">Mau lanjut Ular Tangga atau mencoba game lainnya?</p>
+      <div class="game-menu-actions">
+        <button class="modal-btn primary" id="staySnakeBtn">🐍 Ular Tangga</button>
+        <a class="modal-btn game-hub-btn" href="https://games.drama.my.id/">🎮 Game Lainnya</a>
+      </div>
+      <button class="modal-btn" id="closeGameMenuBtn">Tutup</button>
+    </div>
+  </div>
+
   <div id="punishmentModal" class="modal-overlay">
     <div class="modal-box punishment-box">
       <img id="punishmentImage" class="punishment-image" src="no4.png" alt="">
@@ -1600,6 +1642,10 @@
     const punishmentDurationSelect = document.getElementById("punishmentDuration");
 
     const openSettingsBtn = document.getElementById("openSettingsBtn");
+    const gameMenuModal = document.getElementById("gameMenuModal");
+    const openGameMenuBtn = document.getElementById("openGameMenuBtn");
+    const closeGameMenuBtn = document.getElementById("closeGameMenuBtn");
+    const staySnakeBtn = document.getElementById("staySnakeBtn");
     const closeSettingsBtn = document.getElementById("closeSettingsBtn");
     const saveSettingsBtn = document.getElementById("saveSettingsBtn");
     let punishmentCountdownInterval = null;
@@ -1979,6 +2025,12 @@
     }
 
     openSettingsBtn.addEventListener("click", openSettings);
+    openGameMenuBtn.addEventListener("click", () => gameMenuModal.classList.add("show"));
+    closeGameMenuBtn.addEventListener("click", () => gameMenuModal.classList.remove("show"));
+    staySnakeBtn.addEventListener("click", () => gameMenuModal.classList.remove("show"));
+    gameMenuModal.addEventListener("click", (event) => {
+      if (event.target === gameMenuModal) gameMenuModal.classList.remove("show");
+    });
     closeSettingsBtn.addEventListener("click", closeSettings);
     saveSettingsBtn.addEventListener("click", saveSettings);
     startPunishmentBtn.addEventListener("click", startPunishmentTimer);
