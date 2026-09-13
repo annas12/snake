@@ -148,7 +148,45 @@
       line-height: 1.5;
       color: #bbbbbb;
     }
-  </style>
+  
+    .choice-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      background: rgba(8, 0, 20, .72);
+      backdrop-filter: blur(8px);
+    }
+    .choice-overlay.show { display: grid; }
+    .choice-box {
+      width: min(390px, 100%);
+      padding: 28px 22px;
+      border-radius: 22px;
+      background: #fff;
+      box-shadow: 0 24px 70px rgba(0,0,0,.3);
+      text-align: center;
+    }
+    .choice-box h2 { margin: 0 0 8px; color: #35113d; }
+    .choice-box p { margin: 0 0 20px; color: #6e5b72; line-height: 1.5; }
+    .choice-actions { display: grid; gap: 10px; }
+    .choice-btn {
+      display: flex;
+      min-height: 48px;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      border-radius: 12px;
+      color: #fff;
+      background: #812b78;
+      font: inherit;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .choice-btn.secondary { color: #812b78; background: #f3e8f2; }
+</style>
 </head>
 
 <body>
@@ -195,9 +233,24 @@
     </p>
   </div>
 
+  <div id="gameChoiceOverlay" class="choice-overlay" role="dialog" aria-modal="true" aria-labelledby="gameChoiceTitle">
+    <div class="choice-box">
+      <h2 id="gameChoiceTitle">Login berhasil</h2>
+      <p>Pilih permainan yang ingin kamu buka.</p>
+      <div class="choice-actions">
+        <button id="goSnakeBtn" class="choice-btn">🐍 Ular Tangga</button>
+        <a class="choice-btn" href="https://games.drama.my.id/">🎮 Game Lainnya</a>
+        <button id="closeChoiceBtn" class="choice-btn secondary">Tutup</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw_u3ks0WEAs3h0CYymTF5K5wjWuVLQqWWvHJsTVg4IIxKYP1DhL68fm0wLBIMF0igp/exec";
     const GAME_URL = "./game.html";
+    const gameChoiceOverlay = document.getElementById("gameChoiceOverlay");
+    const goSnakeBtn = document.getElementById("goSnakeBtn");
+    const closeChoiceBtn = document.getElementById("closeChoiceBtn");
 
     const form = document.getElementById("loginForm");
     const emailInput = document.getElementById("emailInput");
@@ -240,6 +293,13 @@
       document.body.appendChild(script);
     }
 
+    goSnakeBtn.addEventListener("click", function() {
+      window.location.replace(GAME_URL);
+    });
+    closeChoiceBtn.addEventListener("click", function() {
+      gameChoiceOverlay.classList.remove("show");
+    });
+
     form.addEventListener("submit", function(e) {
       e.preventDefault();
 
@@ -263,9 +323,8 @@
           localStorage.setItem("game_pasutri_session_id", result.session_id);
           localStorage.setItem("game_pasutri_login_at", Date.now());
 
-          showMessage("Login berhasil. Mengalihkan ke game...", "success");
-
-          window.location.replace(GAME_URL);
+          showMessage("Login berhasil. Pilih permainan.", "success");
+          gameChoiceOverlay.classList.add("show");
         } else {
           showMessage(result.message || "Email belum terdaftar.", "error");
           button.disabled = false;
