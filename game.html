@@ -1456,6 +1456,23 @@
       text-decoration: none;
       box-sizing: border-box;
     }
+
+    .game-menu-trigger {
+      width: auto;
+      min-width: 46px;
+      padding-inline: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      white-space: nowrap;
+      font-size: 14px;
+    }
+    .game-menu-trigger span { display: inline; }
+    @media (max-width: 480px) {
+      .game-menu-trigger { padding-inline: 9px; font-size: 12px; }
+      .game-menu-trigger span { display: none; }
+    }
 </style>
 </head>
 <body>
@@ -1538,7 +1555,7 @@
     <div class="topbar">
       <div class="title">ULAR TANGGA<br>DEWASA</div>
       <div class="top-actions">
-        <button class="settings-btn" id="openGameMenuBtn" title="Game lainnya">🎮</button>
+        <button class="settings-btn game-menu-trigger" id="openGameMenuBtn" title="Buka pilihan game">🎮 <span>Game Lainnya</span></button>
         <button class="settings-btn" id="openSettingsBtn" title="Setting">⚙️</button>
       </div>
     </div>
